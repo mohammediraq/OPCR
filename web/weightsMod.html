@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title></title>
+
+        <!-- Bootstrap core CSS -->
+
+
+        <!-- Custom styles for this template -->
+
+    </head>
+
+    <body>
+        <section ng-app="angulerRouter" ng-controller="angulerAdmin">
+            <div class="row" >
+                <div class="col">
+
+                    <form name="modWeightsForm" class="col-md-8">
+                        <div class="form-group">
+                            <label>Career Name</label>
+                            <input type="text" ng-model="cn" name="weightName" class="form-control" aria-describedby="careerHelp" placeholder="Enter Career Name" required="required">
+                            <small id="careerHelp" class="form-text text-muted">Career name will be the Root element for classes and subclasses.</small>
+                            <span ng-show="!modWeightsForm.weightName.$error.required">Required Field</span>
+                            
+                        </div>
+
+                        
+
+                    </form>
+                    <button class="btn btn-primary" ng-disabled="disableButton" ng-click="insertClass(cn, cl, scl)">Submit</button>
+                    <button class="btn btn-primary" ng-click="newAction()">New</button>
+                </div>  
+                <div class="col">
+                    <!--column 2-->
+                </div>
+            </div>
+        </section>
+
+
+    </body>
+</html>
+

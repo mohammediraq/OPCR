@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <script src="jquery.js" type="text/javascript"></script>
+        <script src="lib/angular.js" type="text/javascript"></script>
+        <script src="lib/angularClasses/angApp.js" type="text/javascript"></script>
+        <script src="lib/angularClasses/angRegister.js" type="text/javascript"></script>
+        <script src="lib/angular-filter.js" type="text/javascript"></script>
+        <script src="lib/angular-router.js" type="text/javascript"></script>
+        <script src="lib/angular-filter.js" type="text/javascript"></script>
+        <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="lib/bootstrap/css/bootstrap-grid.min.css" rel="stylesheet" type="text/css"/>
+        <script src="lib/bootstrap/jquery-3.2.1.slim.min.js" type="text/javascript"></script>
+        <link href="lib/bootstrap/justified-nav.css" rel="stylesheet" type="text/css"/>
+        <script src="lib/bootstrap/popper.js" type="text/javascript"></script>
+        <title>Administration</title>
+
+        <!-- Bootstrap core CSS -->
+
+
+        <!-- Custom styles for this template -->
+
+        <style>
+            .btn{
+                border-radius: 90px;
+            }
+        </style>
+    </head>
+
+    <body style=''  ng-app="angulerRouter"  ng-controller="regctrl">
+
+        <div class="container">
+
+            <header class="masthead">
+                <h3 class="text-muted"></h3>
+
+
+            </header>
+
+            <main role="main" >
+
+                <!-- Jumbotron -->
+                <div class="jumbotron">
+                    <h1>Registration</h1>
+                    <p class="lead">Build your profile with few steps!</p>
+
+                </div>
+
+
+                <!-- Example row of columns -->
+                <div class="row">
+
+                    <div class="col">
+                        <h2>Personal Data</h2>
+                        <p>Your data is safe! we will use these data for sending courses,updated and will never share it with other users.</p>
+                        <hr>    
+                        <div class='row'>
+                            <div class="form-group col">
+                                <label>First Name</label>
+                                <input type="text" ng-model="ufn"  class="form-control" aria-describedby="SubclassHelp" placeholder="">
+
+
+
+                            </div>
+                            <div class="form-group col">
+                                <label>Middle Name</label>
+                                <input type="text" ng-model="umn"  class="form-control" aria-describedby="SubclassHelp" placeholder="">
+
+
+
+                            </div>
+                            <div class="form-group col">
+                                <label>Last Name</label>
+                                <input type="text" ng-model="uln"  class="form-control" aria-describedby="SubclassHelp" placeholder="">
+
+
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input type="text" ng-model="uad"  class="form-control" aria-describedby="SubclassHelp" placeholder="Street Name,Building Number">
+
+                        </div>
+                        <div class='row'>
+                            <div class='col'>
+                                <label>County</label></br>
+                                <select ng-model="ucun">
+                                    <option  ng-repeat="countyOption in countiesArray  track by $index">{{countyOption.county}}</option>
+
+                                </select> 
+                              
+                            </div>
+                         
+                         
+                        </div>
+                        </br>
+                        <div class="form-group row">
+
+                            <div class="col">
+                                <label>Email</label>
+                                <input  class="input input-danger" type="email" ng-change="validateUserMail(uem)" ng-model="uem"  placeholder="example@domain.com" aria-label="Username" aria-describedby="basic-addon1">
+                            </div>
+                            <div class="col">
+                                <div class="alert alert-{{validationClass}} " ng-show="uem" role="alert">
+                                    <strong>{{uem}}</strong> {{validationMsg}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group " >
+                            <label>Mobile</label>
+                            <input type="text" ng-model="umo"  class="form-control" aria-describedby="SubclassHelp" placeholder="Mobile Number">
+
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <h2>About your Education</h2>
+                        <p>Tell us some about your education and interests ,so we can recommend suitable courses for you.</p>
+                        <hr>
+
+
+                        <div class="row">
+                            <div class="col">
+                                <label>Which Field? </label>
+                                <select ng-model="uedb" >
+
+                                    <option ng-repeat=" eduOptions in eduArray">{{eduOptions.class_name}}</option>
+
+                                </select>
+                            </div>
+
+                        </div>
+                        <hr>    
+                        <div class="row">
+                            <div class="col">
+                                <label>Preferred Language  </label>
+                                <select ng-model="ulang">
+                                    <option  ng-repeat="languageOption in languagesArray track by $index">{{languageOption.language_name}}</option>
+
+                                </select> 
+                            </div>
+
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                <label>Current course level  </label>
+                                <select ng-model='ucq'>
+                                    <option ng-repeat=" edulevelOption in eduLevelArray| orderBy:'level_name'">{{edulevelOption.level_name}}</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <p>If you are currently enrolled in any courses select the course level.</p>
+                        <hr>
+
+                        <div class="row">
+                            <div class="col">
+                                <label>User's Skills  </label>
+                                <input type="textarea" ng-model="uski"  class="form-control" aria-describedby="SubclassHelp" placeholder="List some of your skills either technical skills or business related ones.">
+                            </div>
+
+                        </div>
+                        
+                        <hr>
+
+
+
+
+                    </div>
+
+
+                </div>
+
+                </br> 
+                <div class="">
+                    <div class="" style='margin-left:30%;width:40%;'>
+                        <button ng-click='insertUserProfile(ufn,uln,umn,uad,ucun,uem,umo,uedb,ucq,ulang,uski)' class="btn btn-success btn-xs btn-block" >Submit</button>
+                    </div>
+                </div>
+
+            </main>
+
+
+
+
+
+
+
+
+
+
+            <!-- Site footer -->
+            <footer class="footer">
+                <p></p>
+            </footer>
+
+        </div> <!-- /container -->
+
+
+
+    </body>
+</html>
+

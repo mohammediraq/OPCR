@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Registeration</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <script src="jquery.js" type="text/javascript"></script>
+        <script src="lib/angular.js" type="text/javascript"></script>
+        <script src="lib/angular-router.js" type="text/javascript"></script>
+        <script src="lib/angular-filter.js" type="text/javascript"></script>
+        <script src="lib/angularClasses/angApp.js" type="text/javascript"></script>
+        <script src="lib/angularClasses/angRegister.js" type="text/javascript"></script>
+        
+        <script src="lib/bootstrap/js/bootstrap.js"></script>
+
+        <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+    </head>
+    <body  ng-app="angulerRouter" ng-controller="regctrl">
+
+
+
+
+
+        <section class="">
+            fname
+            <div class="col-md-4">
+                <div class="input-group">
+
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+                <br>
+                midname
+                <div class="input-group">
+
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+                <br>
+                lname
+                <div class="input-group">
+
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+                <br>
+                address
+                <div class="input-group">
+
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+                <br>
+                county
+                <select ng-model="selectedCountyOption">
+                    <option  ng-repeat="countyOption in countiesArray track by $index">{{countyOption.county}}</option>
+
+                </select> 
+                
+
+
+
+
+                <br>
+                <div ng-show="selectedCountyOption">
+                Region  
+                <select ng-disabled="true" >
+                    <option  ng-repeat=" regionOption in countiesArray| filter:selectedCountyOption track by $index">{{regionOption.region}}</option>
+
+                </select> 
+                </div>
+                <br>
+                <div class="input-group">
+
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+                <br>
+                email
+                <div class="input-group">
+
+                    <input  class="input input-danger" type="email" ng-change="validateUserMail(registerationMail)" ng-model="registerationMail"  placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+                <div class="alert alert-{{validationClass}} " ng-show="registerationMail" role="alert">
+                    <strong>{{registerationMail}}</strong> {{validationMsg}}
+                </div>
+
+
+                <br>
+                mobile
+                <div class="input-group">
+
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+                <br>
+                eduback
+
+                <select ng-model="selectedEduOption" >
+                    <option ng-repeat=" eduOptions in eduArray | unique:'class_name'">{{eduOptions.class_name}}</option>
+
+                </select>
+
+                <br>
+                
+                <div ng-show="selectedEduOption">
+                which subfield?
+                <select >
+                    <option ng-repeat=" eduFieldOption in eduArray| filter:selectedEduOption">{{eduFieldOption.subclass_name}}</option>
+                </select>
+                </div>
+                <br>
+                
+                <div ng-show="selectedEduOption">
+                which level?
+                <select >
+                    <option ng-repeat=" edulevelOption in eduLevelArray | orderBy:'level_name'">{{edulevelOption.level_name}}</option>
+                </select>
+                </div>
+                <br>
+                
+                
+                language
+                <select ng-model="selectedLanguage">
+                    <option  ng-repeat="languageOption in languagesArray track by $index">{{languageOption.language_name}}</option>
+
+                </select> 
+                <br>
+                skills
+                <div class="input-group">
+
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+                <br>
+                preferred job
+                <div class="input-group">
+
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+                <br>
+
+            </div>
+
+            <button class="btn btn-danger" ng-click="">Register</button>
+        </section>
+
+
+
+
+
+
+    </body>
+</html>

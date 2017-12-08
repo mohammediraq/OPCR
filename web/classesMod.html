@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title></title>
+
+        <!-- Bootstrap core CSS -->
+
+
+        <!-- Custom styles for this template -->
+
+    </head>
+
+    <body>
+        <section ng-app="angulerRouter" ng-controller="angulerAdmin">
+            <div class="row" >
+                <div class="col">
+
+                    <form name="modClassForm" class="col-md-8">
+                        <div class="form-group">
+                            <label>Field of study</label>
+                            <input type="text" ng-model="cn" name="careername" class="form-control" aria-describedby="careerHelp" placeholder="Enter Career Name" required="required">
+                            <small id="careerHelp" class="form-text text-muted">Career name will be the Root element for classes and subclasses.</small>
+                            <span ng-show="!modClassForm.careername.$error.required">Required Field</span>
+                            
+                        </div>
+
+                        <div class="form-group">
+                            <label>Class Name</label>
+                            <input type="text" ng-model="cl"  name="classname" class="form-control" aria-describedby="classHelp" placeholder="Enter Class Name">
+                            <small id="classHelp" class="form-text text-muted">Classes are the parent element for the subclasses,first child element for the career element.</small>
+                          
+                            
+                        </div>
+
+                        <div class="form-group">
+                            <label>Subclass Name</label>
+                            <input type="text" ng-model="scl" name="subclassname" class="form-control" aria-describedby="SubclassHelp" placeholder="Enter Subclass Name">
+                            <small id="SubclassHelp" class="form-text text-muted">Subclasses are the last child in the configuration tree.</small>
+                          
+                            
+                        </div>
+
+                    </form>
+                    <button class="btn btn-primary" ng-disabled="disableButton" ng-click="insertClass(cn, cl, scl)">Submit</button>
+                    <button class="btn btn-primary" ng-click="newAction()">New</button>
+                </div>  
+                <div class="col">
+                    <!--column 2-->
+                </div>
+            </div>
+        </section>
+
+
+    </body>
+</html>
+

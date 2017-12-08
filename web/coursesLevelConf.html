@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title></title>
+
+        <!-- Bootstrap core CSS -->
+
+
+        <!-- Custom styles for this template -->
+
+    </head>
+
+    <body>
+        <section ng-app="angulerRouter" ng-controller="angulerAdmin">
+            <div>
+                <span>Filter </span><input type="text" ng-model="k" placeholder="Type to filter table">
+                <table class="table table-hover">
+                    <thead>
+                    <th>Level Order</th>
+                    <th>Level Name</th>    
+                 
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="c in levelsArray  | filter:k">
+                            <td>{{c.level_order}}</td>
+                            <td>{{c.level_name}}</td>
+                         
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </section>
+
+
+    </body>
+</html>
+

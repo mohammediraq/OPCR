@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <script src="jquery.js" type="text/javascript"></script>
+        <script src="lib/angular.js" type="text/javascript"></script>
+        <script src="lib/angularClasses/angApp.js" type="text/javascript"></script>
+        <script src="lib/angularClasses/adminController.js" type="text/javascript"></script>
+        <script src="lib/angular-router.js" type="text/javascript"></script>
+        <script src="lib/angular-filter.js" type="text/javascript"></script>
+        <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="lib/bootstrap/css/bootstrap-grid.min.css" rel="stylesheet" type="text/css"/>
+        <script src="lib/bootstrap/jquery-3.2.1.slim.min.js" type="text/javascript"></script>
+        <link href="lib/bootstrap/justified-nav.css" rel="stylesheet" type="text/css"/>
+        <script src="lib/bootstrap/popper.js" type="text/javascript"></script>
+        <title>Administration</title>
+
+        <!-- Bootstrap core CSS -->
+
+
+        <!-- Custom styles for this template -->
+        
+        <style>
+            .btn{
+                border-radius: 90px;
+            }
+            </style>
+    </head>
+
+    <body style=''  ng-app="angulerRouter"  ng-controller="angulerAdmin">
+
+        <div class="container">
+
+            <header class="masthead">
+                <h4 class="text-muted">Administration Panel</h4>
+
+
+            </header>
+
+            <main role="main" >
+
+                <!-- Jumbotron -->
+                <div class="jumbotron ">
+                    <h1>Welcome,Administrator</h1>
+                    <p class="lead">Add,Modify current data which will be used as a configuration for the application's engine. </p>
+
+                </div>
+
+
+                <!-- Example row of columns -->
+                <div class="row">
+                    
+                    <div class="col">
+                        <h4>Classes</h4>
+                        <p>View in which the Administrator will be able to Add new classes configuration or edit the current classes.</p>
+                        <div class="">
+                            
+                        <p class="col"><a class="btn btn-sm btn-success btn-xs btn-block" ng-click="getAllClasses()" href="#!showClasses" role="button">Show Classes </a></p>
+                        <p class="col"><a class="btn btn-sm btn-success btn-xs btn-block" href="#!modifyClasses" role="button">New Classes </a></p>
+                    </div>
+                        </div>
+                    <div class="col">
+                        <h4>Interest Areas</h4>
+                        <p>View in which the Administrator can add Interest Areas to be available to the user while the registration process.</p>
+                        <p><a class="btn btn-sm btn-success btn-xs btn-block" href="#!viewInterests" ng-click="getAllInterests()" role="button">Show Interests </a></p>
+                         <p><a class="btn btn-sm btn-success btn-xs btn-block" href="#!addInterests" role="button">New Interests </a></p>
+                    </div>
+                    <div class="col">
+                        <h4>User Item Weights</h4>
+                        <p>This view for adding new item with a weight (percentage) which will be used to order the priority of data items for user's ontology.</p>
+                        <p><a class="btn btn-sm btn-success btn-xs btn-block" href="#!viewWeights" ng-click='getAllWeights()' role="button">Show Weights </a></p>
+                        <p><a class="btn btn-sm btn-success btn-xs btn-block" href="#" role="button">New Weight </a></p>
+                    </div>
+                    <div class="col">
+                        <h4>Languages</h4>
+                        <p>View/Edit languages reference.</p>
+                        <p><a class="btn btn-sm btn-success btn-xs btn-block" href="#!viewlangs" ng-click='getAllLanguages()' role="button">Show Languages </a></p>
+                        <p><a class="btn btn-sm btn-success btn-xs btn-block" href="#!addlangs" role="button">Add Language </a></p>
+                    </div>
+                     <div class="col">
+                        <h4>Course Levels</h4>
+                        <p></p>
+                        <p><a class="btn btn-sm btn-success btn-xs btn-block" href="#!viewCourseLevels" ng-click='getAllLevels()' role="button">Show Levels </a></p>
+                        <p><a class="btn btn-sm btn-success btn-xs btn-block" href="#!editCourseLevels" role="button">Order Levels </a></p>
+                    </div>
+                </div>
+
+
+            </main>
+        
+            <div ng-view style='overflow: scroll;height: 500px; overflow-x: hidden;' ></div>
+
+
+
+
+
+
+
+
+
+            <!-- Site footer -->
+            <footer class="footer">
+                <p></p>
+            </footer>
+
+        </div> <!-- /container -->
+
+
+
+    </body>
+</html>
+

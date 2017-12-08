@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title></title>
+
+        <!-- Bootstrap core CSS -->
+
+
+        <!-- Custom styles for this template -->
+
+    </head>
+
+    <body>
+        <section ng-app="angulerRouter" ng-controller="angulerAdmin">
+            <div class="row" >
+                <div class="col">
+
+                    <form name="modAreaForm" class="col-md-8">
+                   
+                        <div class="form-group">
+                            <label>Interest area</label>
+                            <input type="text" ng-model="intname"  class="form-control" aria-describedby="SubclassHelp" placeholder="Enter area Name">
+                            <small id="SubclassHelp" class="form-text text-muted">This will be one of user's selection while registration.</small>
+                          
+                            
+                        </div>
+
+                    </form>
+                    <button class="btn btn-primary" ng-disabled="disableButton" ng-click="addNewInterest(intname)">Submit</button>
+                    <button class="btn btn-primary" ng-click="newAction()">New</button>
+                </div>  
+                <div class="col">
+                    <!--column 2-->
+                </div>
+            </div>
+        </section>
+
+
+    </body>
+</html>
+

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title></title>
+
+        <!-- Bootstrap core CSS -->
+
+
+        <!-- Custom styles for this template -->
+
+    </head>
+
+    <body>
+        <section ng-app="angulerRouter" ng-controller="angulerAdmin">
+            <div class="row" >
+                <div class="col">
+
+                    <form name="modClassForm" class="col-md-8">
+                        <div class="form-group">
+                            <label>Level Name</label>
+                            <input type="text" ng-model="ln" name="careername" class="form-control" aria-describedby="careerHelp" placeholder="Enter Level Name" required="required">
+                            <small id="careerHelp" class="form-text text-muted">ex. MSc,Phd</small>
+                            <span ng-show="!modClassForm.careername.$error.required">Required Field</span>
+                            
+                        </div>
+
+                        <div class="form-group">
+                            <label>Level Order</label>
+                            <input type="text" ng-model="lo"  name="classname" class="form-control" aria-describedby="classHelp" placeholder="Enter Level Order">
+                            <small id="classHelp" class="form-text text-muted">The level order which will be used by the application algorithm to compare the current user's level and recommend courses with a higher level.</small>
+                            <small id="classHelp" class="form-text text-muted">Order ex.:1,2,3</small>
+                            
+                        </div>
+
+                       
+                    </form>
+                    <button class="btn btn-primary" ng-disabled="disableButton" ng-click="insertCourseLevel(ln,lo)">Submit</button>
+                    <button class="btn btn-primary" ng-click="newAction()">New</button>
+                </div>  
+                <div class="col">
+                    <!--column 2-->
+                </div>
+            </div>
+        </section>
+
+
+    </body>
+</html>
+

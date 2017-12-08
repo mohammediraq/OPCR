@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title></title>
+
+        <!-- Bootstrap core CSS -->
+
+
+        <!-- Custom styles for this template -->
+
+    </head>
+
+    <body>
+        <section ng-app="angulerRouter" ng-controller="angulerAdmin">
+            <div>
+                <span>Filter </span><input type="text" ng-model="k" placeholder="Type to filter table">
+                <table class="table table-hover">
+                    <thead>
+                    <th>Area Name</th>
+                    <th>ID </th>
+                    <th>Added in</th>    
+            
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="i  in InterestsArray  | filter:k">
+                            <td>{{i.area_name}}</td>
+                             <td>{{i.area_id}}</td>
+                            <td>{{i.time_stamp}}</td>
+                        
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </section>
+
+
+    </body>
+</html>
+
