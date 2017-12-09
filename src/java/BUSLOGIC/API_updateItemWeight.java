@@ -19,7 +19,7 @@ import org.json.JSONArray;
  *
  * @author AhmedShalaby
  */
-public class API_insItemWeight extends HttpServlet {
+public class API_updateItemWeight extends HttpServlet {
 
     db_mysqlops mysql = new db_mysqlops();
     FN_toJSON json = new FN_toJSON();
@@ -41,22 +41,26 @@ public class API_insItemWeight extends HttpServlet {
             JSONArray m;
             double maxPercentage, passedPercentage;
             String itemName;
+            int recid;
+            
+            recid = Integer.parseInt(request.getParameter("rec"));
             itemName = request.getParameter("it").replace("%20", " ");
             passedPercentage = Double.parseDouble(request.getParameter("pr"));
+            
 //            get available percentage
             maxPercentage = env.getAvailablePercentage();
 //            comparing the returned percentage to the given one
             if (maxPercentage >= passedPercentage) {
                 mysql.openmySQLconnection();
-                mysql.executeSQL(env.dq_insertItem(itemName, passedPercentage));
+                mysql.executeSQL(env.dq_updateItem(recid,itemName,passedPercentage));
                 mysql.closemySQLconnection();
-                m = json.printJson("weightResponse1", "Item was updated");
+                m = json.printJson("weightResponse", "Item was updated");
                 
                 out.print(m);
 
             } else if (maxPercentage < passedPercentage) {
 
-                m = json.printJson("weightResponse1", "Invalid value: " + passedPercentage + ", Please assign a value <= " + maxPercentage);
+                m = json.printJson("weightResponse", "Invalid value: " + passedPercentage + ", Please assign a value <= " + maxPercentage);
                 out.print(m);
             }
             
@@ -80,7 +84,7 @@ public class API_insItemWeight extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(API_insItemWeight.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(API_updateItemWeight.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -98,7 +102,7 @@ public class API_insItemWeight extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(API_insItemWeight.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(API_updateItemWeight.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

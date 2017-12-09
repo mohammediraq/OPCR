@@ -267,7 +267,11 @@ public class var_env {
         mysql.openmySQLconnection();
         t = Double.parseDouble(mysql.executeSQLquery_stringRS("select sum(item_weight) from DATSET.usr_item_weight", 1));
         mysql.closemySQLconnection();
-
+        
+//        handling first recod is null
+  
+        
+        
         p = 100 - t;
         if (p < 0) {
             p = 0.0;
@@ -280,6 +284,16 @@ public class var_env {
 
 //        generate an id 
         q = "insert into DATSET.usr_item_weight (item_name,item_weight) values ('" + itemName + "'," + itemWeight + ")";
+
+        return q;
+    }
+    
+    
+      public String dq_updateItem(int recNumber,String itemName, double itemWeight) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, InstantiationException, Exception {
+        String q;
+
+//        generate an id 
+        q = "update DATSET.usr_item_weight set item_name  = '"+itemName+"' ,item_weight ="+itemWeight+"  where recid = "+recNumber+"";
 
         return q;
     }

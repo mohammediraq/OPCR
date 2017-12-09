@@ -48,14 +48,16 @@ angulerRouterApp.controller('regctrl', function ($scope, $http) {
 
 //validate user mail
     $scope.validateUserMail = function (m) {
+        $scope.disableButton = false;
         $http.get("API_getUserEmail?userEmail=" + m).then(function (response) {
-
+            
 //            
             $scope.emailExistense = response.data[0].found;
             if ($scope.emailExistense == 1)
             {
                 $scope.validationClass = "danger";
                 $scope.validationMsg = "is already registered";
+                $scope.disableButton = true;
 
             } else
             {
@@ -71,13 +73,16 @@ angulerRouterApp.controller('regctrl', function ($scope, $http) {
 
 // insert profile 
     $scope.insertUserProfile = function (ufn,uln,umn,uad,ucun,uem,umo,uedb,ucq,ulang,uski) {
+        $scope.disableButton =false;
+        $scope.showResponsePanel =false;
+        
         $http.get('/Ontology/API_insertNewUser?ufn='+ufn+'&uln='+uln+'&umn='+umn+'&uad='+uad+'&ucun='+ucun+'&uem='+uem+'&umo='+umo+'&uedb='+uedb+'&ucq='+ucq+'&ulang='+ulang+'&uski='+uski+'').then(function (response) {
-            if (response.status === 200)
-            {
-            $scope.registrationStatus = "Success";
-            }
+            
+            $scope.registrationStatus = response.data;
+            console.log($scope.registrationStatus[0].addingUserResponse);           
             });
-            $scope.disableButton =true;
+        $scope.showResponsePanel =true;
+        $scope.disableButton =true;
     };
 //    
 

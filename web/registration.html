@@ -28,6 +28,10 @@
             .btn{
                 border-radius: 90px;
             }
+            
+            .alert{
+                border-radius: 90px;
+            }
         </style>
     </head>
 
@@ -90,13 +94,13 @@
                             <div class='col'>
                                 <label>County</label></br>
                                 <select ng-model="ucun">
-                                    <option  ng-repeat="countyOption in countiesArray  track by $index">{{countyOption.county}}</option>
+                                    <option  ng-repeat="countyOption in countiesArray track by $index">{{countyOption.county}}</option>
 
                                 </select> 
-                              
+
                             </div>
-                         
-                         
+
+
                         </div>
                         </br>
                         <div class="form-group row">
@@ -167,7 +171,7 @@
                             </div>
 
                         </div>
-                        
+
                         <hr>
 
 
@@ -181,7 +185,13 @@
                 </br> 
                 <div class="">
                     <div class="" style='margin-left:30%;width:40%;'>
-                        <button ng-click='insertUserProfile(ufn,uln,umn,uad,ucun,uem,umo,uedb,ucq,ulang,uski)' class="btn btn-success btn-xs btn-block" >Submit</button>
+                        <button ng-disabled="disableButton"  ng-click='insertUserProfile(ufn, uln, umn, uad, ucun, uem, umo, uedb, ucq, ulang, uski)'   class="btn btn-success btn-xs btn-block" >Submit</button>
+
+
+                        <div class="alert alert-success " ng-show="showResponsePanel" role="alert">
+                            <strong> {{registrationStatus[0].addingUserResponse}}</strong>
+                        </div>
+
                     </div>
                 </div>
 

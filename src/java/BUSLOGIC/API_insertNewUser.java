@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
 
 /**
  *
@@ -24,6 +25,7 @@ public class API_insertNewUser extends HttpServlet {
     db_mysqlops mysql = new db_mysqlops();
     FN_toJSON json = new FN_toJSON();
     var_env env = new var_env();
+    JSONArray m;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,7 +47,7 @@ public class API_insertNewUser extends HttpServlet {
             String usr_mid_name = request.getParameter("umn").replace("%20", " ");
             String usr_address = request.getParameter("uad").replace("%20", " ");
             String usr_county = request.getParameter("ucun").replace("%20", " ");
-           
+
             String usr_email = request.getParameter("uem").replace("%20", " ");
             String usr_mobile = request.getParameter("umo").replace("%20", " ");
 //          end of contact data
@@ -54,17 +56,23 @@ public class API_insertNewUser extends HttpServlet {
             String usr_language = request.getParameter("ulang").replace("%20", " ");
             String usr_skills = request.getParameter("uski").replace("%20", " ");
 
+            if (!"undefined".equals(usr_first_name) && !"undefined".equals(usr_last_name) && !"undefined".equals(usr_mid_name) && !"undefined".equals(usr_address) && !"undefined".equals(usr_county) && !"undefined".equals(usr_email) && !"undefined".equals(usr_mobile) && !"undefined".equals(usr_education_background) && !"undefined".equals(usr_current_qualification) && !"undefined".equals(usr_language) && !"undefined".equals(usr_skills)) {
 //            Create UID
-            usr_id = env.createUID(usr_first_name, usr_last_name);
+                usr_id = env.createUID(usr_first_name, usr_last_name);
 //          Generating queries for adding new user
-            userConInfo = env.dq_insertUserContactInfo(usr_id, usr_first_name, usr_mid_name, usr_last_name, usr_address, usr_county,  usr_email, usr_mobile);
-            userEduInfo = env.dq_insertUserEduInfo(usr_id, usr_education_background, usr_current_qualification, usr_language, usr_skills);
-            mysql.openmySQLconnection();
-            mysql.executeSQL(userConInfo);
-            mysql.executeSQL(userEduInfo);
+                userConInfo = env.dq_insertUserContactInfo(usr_id, usr_first_name, usr_mid_name, usr_last_name, usr_address, usr_county, usr_email, usr_mobile);
+                userEduInfo = env.dq_insertUserEduInfo(usr_id, usr_education_background, usr_current_qualification, usr_language, usr_skills);
+                mysql.openmySQLconnection();
+                mysql.executeSQL(userConInfo);
+                mysql.executeSQL(userEduInfo);
 
-            mysql.closemySQLconnection();
-
+                mysql.closemySQLconnection();
+                m = json.printJson("addingUserResponse", "Thanks " + usr_first_name + " for registeration!");
+                out.print(m);
+            } else {
+                m = json.printJson("addingUserResponse", "Registeration Error: Null data is not allowed.");
+                out.print(m);
+            }
         }
     }
 
@@ -93,6 +101,7 @@ public class API_insertNewUser extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(API_insertNewUser.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     /**
