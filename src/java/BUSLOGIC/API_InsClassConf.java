@@ -60,6 +60,7 @@ public class API_InsClassConf extends HttpServlet {
                 mysql.openmySQLconnection();
                 mysql.executeSQL(q2);
                 mysql.closemySQLconnection();
+             //   fix connection openning
             }
         }
     }

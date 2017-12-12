@@ -45,7 +45,7 @@ public class var_env {
             + "on a.usr_id = b.usr_id ";
 //   
 
-    public String dq_getAllClasses = "SELECT * FROM DATSET.conf_classes a inner join DATSET.conf_subclasses b on a.class_id = b.class_id order by a.career_name";
+    public String dq_getAllClasses = "SELECT * FROM datset.conf_classes a right join datset.conf_subclasses b on a.recid= b.recid";
     public String dq_getAllInterestAreas = "Select * from DATSET.conf_interest_areas";
 
 //adding classes 
@@ -153,7 +153,7 @@ public class var_env {
             }
         }
 
-        String q_Insertcareer = "insert into DATSET.conf_classes (career_name,career_id,class_name,class_id) values ('" + careerName + "','" + careerId + "','" + className + "','" + classId + "')";
+        String q_Insertcareer = "insert into DATSET.conf_classes (field_of_study,field_id,class_name,class_id) values ('" + careerName + "','" + careerId + "','" + className + "','" + classId + "')";
 
         q_insertClass = q_Insertcareer;
 

@@ -30,7 +30,7 @@
                     </tr>
                     <tbody>
                         <tr ng-repeat="c in classesArray| filter:k">
-                            <td>{{c.career_name}}</td>
+                            <td>{{c.field_of_study}}</td>
                             <td>{{c.class_name}}</td>
                             <td>{{c.subclass_name}}</td>
                             <td><button class='btn btn-danger' ng-click='deleteClass(c.recid)'>DELETE</button></td>
