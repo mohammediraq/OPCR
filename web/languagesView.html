@@ -27,10 +27,10 @@
 
                     </thead>
                     <tbody>
-                        <tr ng-repeat="l in langsArray | filter:k">
-                            <td>{{l.langid}}</td>
+                        <tr ng-repeat="l in langsArray| filter:k">
+                            <td>{{l.recid}}</td>
                             <td>{{l.language_name}}</td>
-
+                            <td><button class='btn btn-danger' ng-click='deleteLanguage(l.recid)'>DELETE</button></td>
 
 
                         </tr>

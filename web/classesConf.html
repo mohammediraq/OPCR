@@ -19,7 +19,7 @@
         <section ng-app="angulerRouter" ng-controller="angulerAdmin">
             <div>
                 <span>Filter </span><input type="text" ng-model="k" placeholder="Type to filter table">
-                <table class="table table-hover">
+                <table class="table table-hover ">
 
                     
                     <tr>
@@ -33,6 +33,7 @@
                             <td>{{c.career_name}}</td>
                             <td>{{c.class_name}}</td>
                             <td>{{c.subclass_name}}</td>
+                            <td><button class='btn btn-danger' ng-click='deleteClass(c.recid)'>DELETE</button></td>
                         </tr>
                     </tbody>
                 </table>

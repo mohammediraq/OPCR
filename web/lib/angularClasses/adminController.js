@@ -62,7 +62,10 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
             $scope.currentWeightsArray = response.data;
             console.log($scope.currentWeightsArray);
         });
+
+        $scope.getAllWeights();
         $scope.niwr = true;
+
     };
 
 
@@ -73,8 +76,9 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
         $http.get('/Ontology/API_updateItemWeight?rec=' + rec + '&it=' + it + '&pr=' + wv + '').then(function (response) {
             $scope.updateWeightsArray = response.data;
             console.log($scope.updateWeightsArray);
-        });
 
+        });
+        $scope.getAllWeights();
     };
 
 
@@ -127,6 +131,53 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
 
     };
 
+
+    $scope.deleteClass = function (rec)
+    {
+        var rowIndex = rec + 1;
+        $http.get('/Ontology/API_removeRecord?t=conf_classes&r=' + rec).then(function (response) {
+            $scope.getAllClasses();
+        });
+
+    };
+
+    $scope.deleteInterest = function (rec)
+    {
+        var rowIndex = rec + 1;
+        $http.get('/Ontology/API_removeRecord?t=conf_interest_areas&r=' + rec).then(function (response) {
+            $scope.getAllInterests();
+        });
+
+    };
+
+    $scope.deleteWeight = function (rec)
+    {
+        var rowIndex = rec + 1;
+        $http.get('/Ontology/API_removeRecord?t=usr_item_weight&r=' + rec).then(function (response) {
+            $scope.getAllWeights();
+        });
+
+
+    };
+
+    $scope.deleteLanguage = function (rec)
+    {
+        var rowIndex = rec + 1;
+        $http.get('/Ontology/API_removeRecord?t=conf_languages&r=' + rec).then(function (response) {
+        });
+        $scope.getAllLanguages();
+    };
+
+    $scope.deleteCourseLevel = function (rec)
+    {
+        var rowIndex = rec + 1;
+        $http.get('/Ontology/API_removeRecord?t=conf_course_lvl&r=' + rec).then(function (response) {
+        $scope.getAllLevels();
+        
+        });
+        
+        
+    };
 
 
 });

@@ -24,14 +24,14 @@
                     <th>Area Name</th>
                     <th>ID </th>
                     <th>Added in</th>    
-            
+
                     </thead>
                     <tbody>
-                        <tr ng-repeat="i  in InterestsArray  | filter:k">
+                        <tr ng-repeat="i  in InterestsArray | filter:k">
                             <td>{{i.area_name}}</td>
-                             <td>{{i.area_id}}</td>
+                            <td>{{i.area_id}}</td>
                             <td>{{i.time_stamp}}</td>
-                        
+                            <td><button class='btn btn-danger' ng-click='deleteInterest(i.recid)'>DELETE</button></td>
                         </tr>
                     </tbody>
                 </table>

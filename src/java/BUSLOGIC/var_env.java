@@ -32,9 +32,9 @@ public class var_env {
 //    SubClasses
     public String dq_getedufields = "SELECT * FROM DATSET.conf_subclasses";
 // Languages 
-    public String dq_getalllanguages = "SELECT distinct(language_name),langid FROM DATSET.conf_languages";
+    public String dq_getalllanguages = "SELECT distinct(language_name),recid FROM DATSET.conf_languages";
 //    course level
-    public String dq_getallcourselevel = "SELECT * FROM DATSET.conf_course_lvl";
+    public String dq_getallcourselevel = "SELECT * FROM DATSET.conf_course_lvl order by level_order asc";
 // nss
     public String dq_getnss = "SELECT * FROM DATSET.uni_nss_scoring";
 //    item weight
@@ -54,8 +54,8 @@ public class var_env {
     public String q_insertClass = null;
     public String q_insertSubClass = null;
 
-    public String dq_insertUserContactInfo(String uid, String ufn, String umn, String uln, String uad, String ucn,  String uem, String umo) {
-        String q_contact = "insert into DATSET.usr_contact_dat (usr_id,usr_first_name,usr_last_name,usr_mid_name,usr_address,usr_county,usr_region,usr_email,usr_mobile) values ('" + uid + "','" + ufn + "','" + uln + "','" + umn + "','" + uad + "','" + ucn + "',(select region from DATSET.uk_countries where county ='"+ucn+"'),'" + uem + "','" + umo + "')";
+    public String dq_insertUserContactInfo(String uid, String ufn, String umn, String uln, String uad, String ucn, String uem, String umo) {
+        String q_contact = "insert into DATSET.usr_contact_dat (usr_id,usr_first_name,usr_last_name,usr_mid_name,usr_address,usr_county,usr_region,usr_email,usr_mobile) values ('" + uid + "','" + ufn + "','" + uln + "','" + umn + "','" + uad + "','" + ucn + "',(select region from DATSET.uk_countries where county ='" + ucn + "'),'" + uem + "','" + umo + "')";
 
         return q_contact;
 
@@ -80,9 +80,12 @@ public class var_env {
         mysql.closemySQLconnection();
         fnCode = fn.substring(0, 3).toUpperCase();
         lnCode = ln.substring(0, 2).toUpperCase();
-
-        uid = fnCode + lnCode + "000" + recOrder;
-
+        if (null == recOrder) {
+            recOrder = "1";
+            uid = fnCode + lnCode + "000" + recOrder;
+        } else {
+            uid = fnCode + lnCode + "000" + recOrder;
+        }
         return uid;
     }
 
@@ -265,13 +268,21 @@ public class var_env {
     public double getAvailablePercentage() throws Exception {
         double p, t;
         mysql.openmySQLconnection();
-        t = Double.parseDouble(mysql.executeSQLquery_stringRS("select sum(item_weight) from DATSET.usr_item_weight", 1));
+        String qureyResult =mysql.executeSQLquery_stringRS("select sum(item_weight) from DATSET.usr_item_weight", 1);
+        
+        
+        if (qureyResult == null )
+        {
+            qureyResult= "0";
+        t = Double.parseDouble(qureyResult);
+        }
+        else
+        {
+        t = Double.parseDouble(qureyResult);    
+        }
         mysql.closemySQLconnection();
-        
+
 //        handling first recod is null
-  
-        
-        
         p = 100 - t;
         if (p < 0) {
             p = 0.0;
@@ -287,13 +298,12 @@ public class var_env {
 
         return q;
     }
-    
-    
-      public String dq_updateItem(int recNumber,String itemName, double itemWeight) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, InstantiationException, Exception {
+
+    public String dq_updateItem(int recNumber, String itemName, double itemWeight) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, InstantiationException, Exception {
         String q;
 
 //        generate an id 
-        q = "update DATSET.usr_item_weight set item_name  = '"+itemName+"' ,item_weight ="+itemWeight+"  where recid = "+recNumber+"";
+        q = "update DATSET.usr_item_weight set item_name  = '" + itemName + "' ,item_weight =" + itemWeight + "  where recid = " + recNumber + "";
 
         return q;
     }
@@ -304,5 +314,11 @@ public class var_env {
 
         return q;
     }
-}
 
+    public String dq_deleteRecord(String tableName, int recid) {
+        String q;
+        q = "delete from DATSET." + tableName + " where recid =" + recid + "";
+
+        return q;
+    }
+}

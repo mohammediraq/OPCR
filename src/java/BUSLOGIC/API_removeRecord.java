@@ -7,23 +7,24 @@ package BUSLOGIC;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
 
 /**
  *
  * @author AhmedShalaby
  */
-public class API_getalllangs extends HttpServlet {
-
+public class API_removeRecord extends HttpServlet {
+    
     db_mysqlops mysql = new db_mysqlops();
     FN_toJSON json = new FN_toJSON();
     var_env env = new var_env();
+    JSONArray m;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,14 +36,22 @@ public class API_getalllangs extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException, Exception {
+            throws ServletException, IOException, ClassNotFoundException, Exception {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-//            this is to get all counties
+            String tbl;
+            int recid;
+            
+            tbl = request.getParameter("t").replace("%20", " ");
+            recid = Integer.parseInt(request.getParameter("r"));
+            
             mysql.openmySQLconnection();
-            mysql.executeSQLquery_stringRS2(env.dq_getalllanguages, 1);
-            out.print(json.convertToJSON(mysql.rs));
+            mysql.executeSQL(env.dq_deleteRecord(tbl, recid));
             mysql.closemySQLconnection();
+            
+            m = json.printJson("removeRecordStatus", "Action Done");
+            out.print(m);
+            
         }
     }
 
@@ -60,16 +69,8 @@ public class API_getalllangs extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(API_getAllRegionsCounties.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(API_getAllRegionsCounties.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(API_getAllRegionsCounties.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(API_getAllRegionsCounties.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(API_getAllRegionsCounties.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(API_removeRecord.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -86,16 +87,8 @@ public class API_getalllangs extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(API_getAllRegionsCounties.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(API_getAllRegionsCounties.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(API_getAllRegionsCounties.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(API_getAllRegionsCounties.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(API_getAllRegionsCounties.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(API_removeRecord.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

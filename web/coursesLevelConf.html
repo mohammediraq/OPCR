@@ -23,13 +23,14 @@
                     <thead>
                     <th>Level Order</th>
                     <th>Level Name</th>    
-                 
+
                     </thead>
                     <tbody>
-                        <tr ng-repeat="c in levelsArray  | filter:k">
+                        <tr ng-repeat="c in levelsArray| filter:k">
                             <td>{{c.level_order}}</td>
                             <td>{{c.level_name}}</td>
-                         
+                            <td><button class='btn btn-danger' ng-click='deleteCourseLevel(c.recid)'>DELETE</button></td>
+
                         </tr>
                     </tbody>
                 </table>
