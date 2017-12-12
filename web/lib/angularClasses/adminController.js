@@ -138,6 +138,10 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
         $http.get('/Ontology/API_removeRecord?t=conf_classes&r=' + rec).then(function (response) {
             $scope.getAllClasses();
         });
+         $http.get('/Ontology/API_removeRecord?t=conf_subclasses&r=' + rec).then(function (response) {
+            $scope.getAllClasses();
+        });
+
 
     };
 
