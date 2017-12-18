@@ -38,6 +38,10 @@ angulerRouterApp.config(function ($routeProvider) {
                     .when("/viewCourseLevels",{
                         templateUrl:"coursesLevelConf.html"
             })
+            
+            .when ("/viewCourseWeights",{
+                    templateUrl:"courseItemWeight.html"
+            })
                   .when("/editCourseLevels",{
                         templateUrl:"coursesLevelsMod.html"
             })

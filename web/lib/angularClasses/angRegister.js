@@ -50,7 +50,7 @@ angulerRouterApp.controller('regctrl', function ($scope, $http) {
     $scope.validateUserMail = function (m) {
         $scope.disableButton = false;
         $http.get("API_getUserEmail?userEmail=" + m).then(function (response) {
-            
+
 //            
             $scope.emailExistense = response.data[0].found;
             if ($scope.emailExistense == 1)
@@ -72,18 +72,28 @@ angulerRouterApp.controller('regctrl', function ($scope, $http) {
 
 
 // insert profile 
-    $scope.insertUserProfile = function (ufn,uln,umn,uad,ucun,uem,umo,uedb,ucq,ulang,uski) {
-        $scope.disableButton =false;
-        $scope.showResponsePanel =false;
-        
-        $http.get('/Ontology/API_insertNewUser?ufn='+ufn+'&uln='+uln+'&umn='+umn+'&uad='+uad+'&ucun='+ucun+'&uem='+uem+'&umo='+umo+'&uedb='+uedb+'&ucq='+ucq+'&ulang='+ulang+'&uski='+uski+'').then(function (response) {
-            
+    $scope.insertUserProfile = function (ufn, uln, umn, uad, ucun, uem, umo, uedb, ucq, ulang, uski, fos, cln, scln) {
+        $scope.disableButton = false;
+        $scope.showResponsePanel = false;
+
+        $http.get('/Ontology/API_insertNewUser?ufn=' + ufn + '&uln=' + uln + '&umn=' + umn + '&uad=' + uad + '&ucun=' + ucun + '&uem=' + uem + '&umo=' + umo + '&uedb=' + uedb + '&ucq=' + ucq + '&ulang=' + ulang + '&uski=' + uski + '').then(function (response) {
+
             $scope.registrationStatus = response.data;
-            console.log($scope.registrationStatus[0].addingUserResponse);           
+            console.log($scope.registrationStatus[0].addingUserResponse);
+        });
+
+        if (fos !== "undefined" && cln !== "undefined" && scln !== "undefined")
+        {
+            $http.get("/Ontology/API_InsClassConf?careerName=" + fos + "&className=" + cln + "&subClassName=" + scln).then(function (response) {
+
             });
-        $scope.showResponsePanel =true;
-        $scope.disableButton =true;
+        }
+     
+        $scope.showResponsePanel = true;
+        $scope.disableButton = true;
     };
+
+
 //    
 
     $scope.onloadFunction = function () {

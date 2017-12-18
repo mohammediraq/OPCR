@@ -28,7 +28,7 @@ public class var_env {
 //  User's mail validiation
     public String dq_getUserEmail = "SELECT count(usr_email) 'found' FROM DATSET.usr_contact_dat where usr_email=";
 //    Classes
-    public String dq_getedubackground = "SELECT * FROM DATSET.conf_classes a inner join conf_subclasses b on a.class_id = b.class_id";
+    public String dq_getedubackground = "SELECT distinct(subclass_name) from datset.conf_subclasses";
 //    SubClasses
     public String dq_getedufields = "SELECT * FROM DATSET.conf_subclasses";
 // Languages 
@@ -39,6 +39,8 @@ public class var_env {
     public String dq_getnss = "SELECT * FROM DATSET.uni_nss_scoring";
 //    item weight
     public String dq_itemweight = "SELECT * FROM DATSET.usr_item_weight";
+    
+    public String dq_Courseitemweight = "SELECT * FROM DATSET.course_item_weight";
 //  user profile data
     public String dq_usrProfile = "SELECT * FROM DATSET.usr_contact_dat a inner join \n"
             + "DATSET.usr_edu_dat b \n"
@@ -290,11 +292,44 @@ public class var_env {
         return p;
     }
 
+     public double getAvailablePercentage_course() throws Exception {
+        double p, t;
+        mysql.openmySQLconnection();
+        String qureyResult =mysql.executeSQLquery_stringRS("select sum(item_weight) from DATSET.course_item_weight", 1);
+        
+        
+        if (qureyResult == null )
+        {
+            qureyResult= "0";
+        t = Double.parseDouble(qureyResult);
+        }
+        else
+        {
+        t = Double.parseDouble(qureyResult);    
+        }
+        mysql.closemySQLconnection();
+
+//        handling first recod is null
+        p = 100 - t;
+        if (p < 0) {
+            p = 0.0;
+        }
+        return p;
+    }
+
     public String dq_insertItem(String itemName, double itemWeight) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, InstantiationException, Exception {
         String q;
 
 //        generate an id 
         q = "insert into DATSET.usr_item_weight (item_name,item_weight) values ('" + itemName + "'," + itemWeight + ")";
+
+        return q;
+    }
+       public String dq_insertItemWeight_course(String itemName, double itemWeight) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, InstantiationException, Exception {
+        String q;
+
+//        generate an id 
+        q = "insert into DATSET.course_item_weight (item_name,item_weight) values ('" + itemName + "'," + itemWeight + ")";
 
         return q;
     }
@@ -307,6 +342,17 @@ public class var_env {
 
         return q;
     }
+    
+    
+    public String dq_updateCourseItem(int recNumber, String itemName, double itemWeight) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, InstantiationException, Exception {
+        String q;
+
+//        generate an id 
+        q = "update DATSET.course_item_weight set item_name  = '" + itemName + "' ,item_weight =" + itemWeight + "  where recid = " + recNumber + "";
+
+        return q;
+    }
+
 
     public String dq_insertCourselevel(String levelName, String levelOrder) {
         String q;

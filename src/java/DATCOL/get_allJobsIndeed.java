@@ -55,7 +55,7 @@ public class get_allJobsIndeed {
                         + "'" + j.select("> table > tbody > tr > td > div:nth-child(1) > span.no-wrap").text() + "',"
                         + "'" + j.select(".summary").text() + "'";
 
-                gv.dbname = "DATSET ";
+                gv.dbname = "DATSET";
                 gv.dbuser = "root";
                 gv.dbpass = "root";
                 gv.dbtable = "Jobs_Indeed_info";

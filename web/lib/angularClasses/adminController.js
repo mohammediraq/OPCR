@@ -22,9 +22,10 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
 
     $scope.insertClass = function (cn, cl, scl) {
         $http.get("/Ontology/API_InsClassConf?careerName=" + cn + "&className=" + cl + "&subClassName=" + scl).then(function (response) {
-
+            $scope.getAllClasses();
         });
-        $scope.disableButton = true;
+        $scope.disableaddsubclassbutton = true;
+
     };
 
     $scope.newAction = function () {
@@ -53,6 +54,15 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
         });
     };
 
+//    
+    $scope.getAllCourseWeights = function () {
+        $http.get('/Ontology/API_getAllCourseItemWeight').then(function (response) {
+            $scope.courseWeightsArray = response.data;
+
+        });
+    };
+
+
 //    validate item weight.
 
     $scope.InsertItemWeight = function (it, wv) {
@@ -67,7 +77,23 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
         $scope.niwr = true;
 
     };
+//    API_insCourseItemWeight
 
+
+    $scope.InsertCourseItemWeight = function (it, wv) {
+        $scope.currentWeightsArray = "";
+        $scope.niwr = false;
+        $http.get('/Ontology/API_insCourseItemWeight?it=' + it + '&pr=' + wv + '').then(function (response) {
+            $scope.currentWeightsArray = response.data;
+            $scope.getAllCourseWeights();
+            console.log($scope.currentWeightsArray);
+
+        });
+
+
+        $scope.niwr = true;
+
+    };
 
 // insert new item
     $scope.updateItemWeight = function (rec, it, wv) {
@@ -76,11 +102,22 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
         $http.get('/Ontology/API_updateItemWeight?rec=' + rec + '&it=' + it + '&pr=' + wv + '').then(function (response) {
             $scope.updateWeightsArray = response.data;
             console.log($scope.updateWeightsArray);
-
+            $scope.getAllCourseWeights();
         });
-        $scope.getAllWeights();
-    };
 
+    };
+//API_updateCourseItemWeight
+
+    $scope.updateCourseItemWeight = function (rec, it, wv) {
+
+        $scope.updateWeightsArray = "";
+        $http.get('/Ontology/API_updateCourseItemWeight?rec=' + rec + '&it=' + it + '&pr=' + wv + '').then(function (response) {
+            $scope.updateWeightsArray = response.data;
+            console.log($scope.updateWeightsArray);
+            $scope.getAllCourseWeights();
+        });
+
+    };
 
 //    get all languages 
     $scope.getAllLanguages = function () {
@@ -138,12 +175,21 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
         $http.get('/Ontology/API_removeRecord?t=conf_classes&r=' + rec).then(function (response) {
             $scope.getAllClasses();
         });
-         $http.get('/Ontology/API_removeRecord?t=conf_subclasses&r=' + rec).then(function (response) {
+        $http.get('/Ontology/API_removeRecord?t=conf_subclasses&r=' + rec).then(function (response) {
             $scope.getAllClasses();
         });
 
 
     };
+
+
+
+    $scope.setClass = function (fos, cl) {
+        $scope.showAddsubClassesPanel = true;
+        $scope.fos = fos;
+        $scope.cln = cl;
+        $scope.disableaddsubclassbutton = false;
+    }
 
     $scope.deleteInterest = function (rec)
     {
@@ -164,6 +210,19 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
 
     };
 
+    $scope.deleteCourseWeight = function (rec)
+    {
+        var rowIndex = rec + 1;
+        $http.get('/Ontology/API_removeRecord?t=course_item_weight&r=' + rec).then(function (response) {
+            $scope.getAllCourseWeights();
+
+        });
+
+
+    };
+
+
+
     $scope.deleteLanguage = function (rec)
     {
         var rowIndex = rec + 1;
@@ -176,11 +235,11 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
     {
         var rowIndex = rec + 1;
         $http.get('/Ontology/API_removeRecord?t=conf_course_lvl&r=' + rec).then(function (response) {
-        $scope.getAllLevels();
-        
+            $scope.getAllLevels();
+
         });
-        
-        
+
+
     };
 
 

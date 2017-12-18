@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title></title>
+
+        <!-- Bootstrap core CSS -->
+
+
+        <!-- Custom styles for this template -->
+
+    </head>
+
+    <body>
+        <section ng-app="angulerRouter" ng-controller="angulerAdmin">
+            <div>
+                <span>Filter </span><input type="text" ng-model="k" placeholder="Type to filter table">
+                <table class="table table-hover ">
+                    <thead>
+
+                    <th>ID</th>
+                    <th>Item Name</th>
+                    <th>Item Weight</th> 
+
+                    </thead>
+                    <tbody>
+                        <tr  ng-repeat="w in courseWeightsArray| filter:k">
+                            <td>{{w.recid}}</td>
+                            <td >{{w.item_name}}</td>
+                            <td >{{w.item_weight}} % </td>
+                            <td><button class="btn btn-danger" ng-click="showUpdatePanel($index)">EDIT</button></td>
+                             <td><button class='btn btn-danger' ng-click='deleteCourseWeight(w.recid)'>DELETE</button></td>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+                <div class='row container'>
+                <div class='col' ng-show='showEditPanel'>
+                    <h4>Modifying {{itn}} , Current weight {{iwe}}</h4>
+                    <div class="row">
+                        <div class="col">
+                            <span>New item Name </span><input ng-model="nit"></input>
+
+                        </div>
+                        <div class="col">
+                            <div class="alert alert-warning " ng-show="nit" role="alert">
+                                New item name : {{nit}}
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <span>New item weight </span><input  ng-model="niw"></input>
+                        </div>
+                        <div class="col">
+                            <div class="alert alert-warning " ng-show="niw" role="alert">
+                                You will change item : {{nit}}'s current weight to {{niw}}
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <button class="btn btn-danger" ng-click="updateItemWeight(rind,nit, niw)">Update</button>
+                    </div>
+
+                    <div class="row">
+                        <div class="alert alert-danger " ng-show="niwr" role="alert">
+
+                            {{updateWeightsArray[0].weightResponse}}
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+                </br>
+              <div class='container col'>
+                    <h4>Add new item</h4>
+                    <div class="row">
+                        <div class="col">
+                            <span>New item Name </span><input ng-model="anit"></input>
+
+                        </div>
+                        <div class="col">
+                            <div class="alert alert-warning " ng-show="anit" role="alert">
+                                New item name : {{anit}}
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <span>New item weight </span><input  ng-model="aniw"></input>
+                        </div>
+                        <div class="col">
+                            <div class="alert alert-warning " ng-show="aniw" role="alert">
+                                New item : {{anit}}'s  weight will be {{aniw}}
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <button class="btn btn-danger" ng-click="InsertCourseItemWeight(anit, aniw)">Add</button>
+                    </div>
+
+                    <div class="row">
+                        <div class="alert alert-danger " ng-show="niwr" role="alert">
+
+                            {{currentWeightsArray[0].weightResponse1}}
+                        </div>
+                    </div>
+                </div>  
+            </div>               
+        </section>
+
+    
+
+        
+
+
+
+    </body>
+</html>
+

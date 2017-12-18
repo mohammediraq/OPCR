@@ -11,7 +11,7 @@
         <script src="lib/angularClasses/angRegister.js" type="text/javascript"></script>
         <script src="lib/angular-filter.js" type="text/javascript"></script>
         <script src="lib/angular-router.js" type="text/javascript"></script>
-        <script src="lib/angular-filter.js" type="text/javascript"></script>
+        <script src="lib/angularfilter.js" type="text/javascript"></script>
         <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <link href="lib/bootstrap/css/bootstrap-grid.min.css" rel="stylesheet" type="text/css"/>
         <script src="lib/bootstrap/jquery-3.2.1.slim.min.js" type="text/javascript"></script>
@@ -28,7 +28,7 @@
             .btn{
                 border-radius: 90px;
             }
-            
+
             .alert{
                 border-radius: 90px;
             }
@@ -134,9 +134,38 @@
                                 <label>Which Field? </label>
                                 <select ng-model="uedb" >
 
-                                    <option ng-repeat=" eduOptions in eduArray">{{eduOptions.class_name}}</option>
+                                    <option ng-repeat=" eduOptions in eduArray">{{eduOptions.subclass_name}}</option>
 
                                 </select>
+                                <a  href="#" ng-click='showAddNewField = true'>Your Field of study isn't listed?</a>
+                                <div ng-show='showAddNewField'>
+
+                                    <div class="form-group">
+                                        <label>Field of study</label>
+                                        <input type="text" ng-model="fos" name="subclassname" class="form-control" aria-describedby="SubclassHelp" placeholder="Enter your field of study">
+                                        <small id="SubclassHelp" class="form-text text-muted">ex. Engineering,Arts,Medicine..</small>
+
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Field of study</label>
+                                        <input type="text" ng-model="cln" name="subclassname" class="form-control" aria-describedby="SubclassHelp" placeholder="Enter your educational field">
+                                        <small id="SubclassHelp" class="form-text text-muted">ex. Computer Science,Acting,Human Surgery..</small>
+
+
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label>your major</label>
+                                        <input type="text" ng-model="scln" name="subclassname" class="form-control" aria-describedby="SubclassHelp" placeholder="Enter your major">
+                                        <small id="SubclassHelp" class="form-text text-muted">ex.Database management,Computer programming..</small>
+
+
+                                    </div>
+                                </div>
+
                             </div>
 
                         </div>
@@ -185,7 +214,7 @@
                 </br> 
                 <div class="">
                     <div class="" style='margin-left:30%;width:40%;'>
-                        <button ng-disabled="disableButton"  ng-click='insertUserProfile(ufn, uln, umn, uad, ucun, uem, umo, uedb, ucq, ulang, uski)'   class="btn btn-success btn-xs btn-block" >Submit</button>
+                        <button ng-disabled="disableButton"  ng-click='insertUserProfile(ufn, uln, umn, uad, ucun, uem, umo, uedb, ucq, ulang, uski, fos, cln, scln);'   class="btn btn-success btn-xs btn-block" >Submit</button>
 
 
                         <div class="alert alert-success " ng-show="showResponsePanel" role="alert">
