@@ -109,7 +109,7 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
 //API_updateCourseItemWeight
 
     $scope.updateCourseItemWeight = function (rec, it, wv) {
-
+      
         $scope.updateWeightsArray = "";
         $http.get('/Ontology/API_updateCourseItemWeight?rec=' + rec + '&it=' + it + '&pr=' + wv + '').then(function (response) {
             $scope.updateWeightsArray = response.data;
@@ -154,14 +154,14 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
 
 
 
-    $scope.showUpdatePanel = function (rn) {
+    $scope.showUpdatePanel = function (rn,it,iw) {
         $scope.showEditPanel = false;
-        var rowIndex = rn + 1;
-        var itemName_el = $("body > div > div > section > div > table > tbody > tr:nth-child(" + rowIndex + ") > td:nth-child(2)");
-        var itemWeight_el = $("body > div > div > section > div > table > tbody > tr:nth-child(" + rowIndex + ") > td:nth-child(3)");
+        var rowIndex = rn ;
+        var itemName_el =it;
+        var itemWeight_el = iw;
         $scope.rind = rowIndex;
-        $scope.itn = itemName_el.text();
-        $scope.iwe = itemWeight_el.text();
+        $scope.itn = itemName_el;
+        $scope.iwe = itemWeight_el;
         $scope.showEditPanel = true;
 
 

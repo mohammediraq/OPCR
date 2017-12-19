@@ -32,7 +32,7 @@
                             <td>{{w.recid}}</td>
                             <td >{{w.item_name}}</td>
                             <td >{{w.item_weight}} % </td>
-                            <td><button class="btn btn-danger" ng-click="showUpdatePanel($index)">EDIT</button></td>
+                            <td><button class="btn btn-danger" ng-click="showUpdatePanel(w.recid,w.item_name,w.item_weight)">EDIT</button></td>
                              <td><button class='btn btn-danger' ng-click='deleteCourseWeight(w.recid)'>DELETE</button></td>
 
                         </tr>
@@ -44,7 +44,7 @@
                     <h4>Modifying {{itn}} , Current weight {{iwe}}</h4>
                     <div class="row">
                         <div class="col">
-                            <span>New item Name </span><input ng-model="nit"></input>
+                            <span>New item Name </span><input ng-model="nit"/>
 
                         </div>
                         <div class="col">
@@ -67,7 +67,7 @@
                     </div>
 
                     <div class="row">
-                        <button class="btn btn-danger" ng-click="updateItemWeight(rind,nit, niw)">Update</button>
+                        <button class="btn btn-danger" ng-click="updateCourseItemWeight(rind,nit, niw)">Update</button>
                     </div>
 
                     <div class="row">
