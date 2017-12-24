@@ -32,7 +32,7 @@
                             <td>{{w.recid}}</td>
                             <td >{{w.item_name}}</td>
                             <td >{{w.item_weight}} % </td>
-                            <td><button class="btn btn-danger" ng-click="showUpdatePanel($index)">EDIT</button></td>
+                            <td><button class="btn btn-danger" ng-click="showUpdatePanel(w.recid,w.item_name,w.item_weight)">EDIT</button></td>
                              <td><button class='btn btn-danger' ng-click='deleteWeight(w.recid)'>DELETE</button></td>
 
                         </tr>

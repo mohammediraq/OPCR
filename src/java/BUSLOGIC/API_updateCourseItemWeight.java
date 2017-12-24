@@ -48,7 +48,7 @@ public class API_updateCourseItemWeight extends HttpServlet {
             passedPercentage = Double.parseDouble(request.getParameter("pr"));
             
 //            get available percentage
-            maxPercentage = env.getAvailablePercentage();
+            maxPercentage = env.getAvailablePercentage_course();
 //            comparing the returned percentage to the given one
             if (maxPercentage >= passedPercentage) {
                 mysql.openmySQLconnection();

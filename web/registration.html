@@ -92,9 +92,9 @@
                         </div>
                         <div class='row'>
                             <div class='col'>
-                                <label>County</label></br>
-                                <select ng-model="ucun">
-                                    <option  ng-repeat="countyOption in countiesArray track by $index">{{countyOption.county}}</option>
+                                <label>City</label></br>
+                                <select ng-model="ucit">
+                                    <option  ng-repeat="cityOption in citiesArray track by $index">{{cityOption.city}}</option>
 
                                 </select> 
 
@@ -214,7 +214,7 @@
                 </br> 
                 <div class="">
                     <div class="" style='margin-left:30%;width:40%;'>
-                        <button ng-disabled="disableButton"  ng-click='insertUserProfile(ufn, uln, umn, uad, ucun, uem, umo, uedb, ucq, ulang, uski, fos, cln, scln);'   class="btn btn-success btn-xs btn-block" >Submit</button>
+                        <button ng-disabled="disableButton"  ng-click='insertUserProfile(ufn, uln, umn, uad, ucit, uem, umo, uedb, ucq, ulang, uski, fos, cln, scln);'   class="btn btn-success btn-xs btn-block" >Submit</button>
 
 
                         <div class="alert alert-success " ng-show="showResponsePanel" role="alert">

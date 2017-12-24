@@ -71,6 +71,7 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
         $http.get('/Ontology/API_insItemWeight?it=' + it + '&pr=' + wv + '').then(function (response) {
             $scope.currentWeightsArray = response.data;
             console.log($scope.currentWeightsArray);
+            $scope.getAllWeights();
         });
 
         $scope.getAllWeights();
@@ -102,7 +103,7 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
         $http.get('/Ontology/API_updateItemWeight?rec=' + rec + '&it=' + it + '&pr=' + wv + '').then(function (response) {
             $scope.updateWeightsArray = response.data;
             console.log($scope.updateWeightsArray);
-            $scope.getAllCourseWeights();
+            $scope.getAllWeights();
         });
 
     };

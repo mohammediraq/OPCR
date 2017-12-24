@@ -9,11 +9,11 @@
 angulerRouterApp.controller('regctrl', function ($scope, $http) {
 
 // get all counties to dropdown list
-    $scope.bindAllCounties = function () {
+    $scope.bindAllCities = function () {
         $http.get("API_getAllRegionsCounties").then(function (response) {
 //        assign data to this variable
             console.log(response.data);
-            $scope.countiesArray = response.data;
+            $scope.citiesArray = response.data;
         });
     };
 
@@ -72,11 +72,11 @@ angulerRouterApp.controller('regctrl', function ($scope, $http) {
 
 
 // insert profile 
-    $scope.insertUserProfile = function (ufn, uln, umn, uad, ucun, uem, umo, uedb, ucq, ulang, uski, fos, cln, scln) {
+    $scope.insertUserProfile = function (ufn, uln, umn, uad, ucit, uem, umo, uedb, ucq, ulang, uski, fos, cln, scln) {
         $scope.disableButton = false;
         $scope.showResponsePanel = false;
 
-        $http.get('/Ontology/API_insertNewUser?ufn=' + ufn + '&uln=' + uln + '&umn=' + umn + '&uad=' + uad + '&ucun=' + ucun + '&uem=' + uem + '&umo=' + umo + '&uedb=' + uedb + '&ucq=' + ucq + '&ulang=' + ulang + '&uski=' + uski + '').then(function (response) {
+        $http.get('/Ontology/API_insertNewUser?ufn=' + ufn + '&uln=' + uln + '&umn=' + umn + '&uad=' + uad + '&ucit=' + ucit + '&uem=' + uem + '&umo=' + umo + '&uedb=' + uedb + '&ucq=' + ucq + '&ulang=' + ulang + '&uski=' + uski + '').then(function (response) {
 
             $scope.registrationStatus = response.data;
             console.log($scope.registrationStatus[0].addingUserResponse);
@@ -98,7 +98,7 @@ angulerRouterApp.controller('regctrl', function ($scope, $http) {
 
     $scope.onloadFunction = function () {
         $scope.bindClassesSubClasses();
-        $scope.bindAllCounties();
+        $scope.bindAllCities();
         $scope.bindAllLanguages();
         $scope.bindAlleduLevels();
     };

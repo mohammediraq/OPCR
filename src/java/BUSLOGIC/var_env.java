@@ -57,7 +57,7 @@ public class var_env {
     public String q_insertSubClass = null;
 
     public String dq_insertUserContactInfo(String uid, String ufn, String umn, String uln, String uad, String ucn, String uem, String umo) {
-        String q_contact = "insert into DATSET.usr_contact_dat (usr_id,usr_first_name,usr_last_name,usr_mid_name,usr_address,usr_county,usr_region,usr_email,usr_mobile) values ('" + uid + "','" + ufn + "','" + uln + "','" + umn + "','" + uad + "','" + ucn + "',(select region from DATSET.uk_countries where county ='" + ucn + " where rownum = 1'),'" + uem + "','" + umo + "')";
+        String q_contact = "insert into DATSET.usr_contact_dat (usr_id,usr_first_name,usr_last_name,usr_mid_name,usr_address,usr_city,usr_region,usr_email,usr_mobile) values ('" + uid + "','" + ufn + "','" + uln + "','" + umn + "','" + uad + "','" + ucn + "',(select distinct(region) from DATSET.uk_countries where city ='" + ucn + "'),'" + uem + "','" + umo + "')";
 
         return q_contact;
 
