@@ -24,6 +24,7 @@ public class coursesModuler {
     public static void main(String[] args) throws SQLException, InstantiationException, IllegalAccessException, Exception {
         // TODO code application logic here
         moduleUniversityNSS();
+        moduleUniversityName();
     
     }
     
