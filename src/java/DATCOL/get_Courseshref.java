@@ -17,6 +17,7 @@ import org.jsoup.Jsoup;
  */
 public class get_Courseshref {
 
+    static BUSLOGIC.coursesModuler cm = new BUSLOGIC.coursesModuler();
     private static Connection con = null;
     private static Statement stmt = null;
     public static String search_language, course_language, search_key, course_startdate, course_field, course_fees, course_feesplan, course_wprovider, uni_address, uni_postal, course_entryrequirements, course_name, course_url, course_desc, course_time, course_title, course_qualification, course_duration, course_location, course_mode, course_assessment, course_requirements, course_fee_int, course_fee_uk;
@@ -24,13 +25,13 @@ public class get_Courseshref {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InstantiationException, IllegalAccessException, Exception {
 
         try {
             for (int pageNum = 1; pageNum < 30; pageNum++) {
 
                 search_language = "English";
-                search_key = "Computer Science";
+                search_key = "Computer Animation";
 
                 //get course url
                 String URL = "https://digital.ucas.com/search/results?SearchText=" + search_key.replace(" ", "+") + "&AutoSuggestType=&SearchType=searchbarbutton&PreviouslyAppliedFilters=D_0_Postgraduate__&filters=Destination_Postgraduate&ProviderText=&SubjectText=&DistanceFromPostcode=1mi&RegionDistancePostcode=&SortOrder=0&CurrentView=List&pageNumber=" + pageNum;
@@ -129,11 +130,14 @@ public class get_Courseshref {
                 con.close();
 
             }
+         
 
         } catch (Exception e) {
             e.printStackTrace();
+        
         }
-
+        cm.moduleUniversityName();
+        cm.moduleUniversityNSS();
     }
 
 }
