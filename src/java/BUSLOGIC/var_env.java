@@ -63,8 +63,8 @@ public class var_env {
 
     }
 
-    public String dq_insertUserEduInfo(String uid, String uedbck, String eduqual, String edulang, String eduski) {
-        String q_edu = "INSERT INTO DATSET.usr_edu_dat (usr_id,usr_education_background,usr_current_qualification,usr_language,usr_skills) VALUES ('" + uid + "','" + uedbck + "','" + eduqual + "','" + edulang + "','" + eduski + "')";
+    public String dq_insertUserEduInfo(String uid, String uedbck, String eduqual, String edulang, String eduski,String usrcrit) {
+        String q_edu = "INSERT INTO DATSET.usr_edu_dat (usr_id,usr_education_background,usr_current_qualification,usr_language,usr_skills,usr_criteria) VALUES ('" + uid + "','" + uedbck + "','" + eduqual + "','" + edulang + "','" + eduski + "','" + usrcrit + "')";
 
         return q_edu;
 
@@ -366,5 +366,18 @@ public class var_env {
         q = "delete from DATSET." + tableName + " where recid =" + recid + "";
 
         return q;
+    }
+    
+       public String dq_getCurrentCriteria(String usrid) {
+        String q_contact = "SELECT usr_criteria FROM DATSET.usr_edu_dat where usr_id = '"+usrid+"'";
+
+        return q_contact;
+
+    }
+         public String dq_updateCurrentCriteria(String usrid,String usrcrit,String sk) {
+        String q_contact = "insert into DATSET.usr_search_history (usr_id,usr_criteria,usr_searchkey) values ('"+usrid+"','"+usrcrit+"','"+sk+"');";
+
+        return q_contact;
+
     }
 }

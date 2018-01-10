@@ -92,6 +92,10 @@
         <servlet-name>API_updateCourseItemWeight</servlet-name>
         <servlet-class>BUSLOGIC.API_updateCourseItemWeight</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>API_courseSearch</servlet-name>
+        <servlet-class>BUSLOGIC.API_courseSearch</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>get_CoursesUCAS</servlet-name>
         <url-pattern>/get_CoursesUCAS</url-pattern>
@@ -183,6 +187,10 @@
     <servlet-mapping>
         <servlet-name>API_updateCourseItemWeight</servlet-name>
         <url-pattern>/API_updateCourseItemWeight</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>API_courseSearch</servlet-name>
+        <url-pattern>/API_courseSearch</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
