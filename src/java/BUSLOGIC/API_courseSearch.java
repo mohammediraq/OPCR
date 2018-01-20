@@ -5,9 +5,13 @@
  */
 package BUSLOGIC;
 
+import static BUSLOGIC.testingClass.calculateCourseSimilarities;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -21,9 +25,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class API_courseSearch extends HttpServlet {
 
+    contentBasedEngine cb = new contentBasedEngine();
     db_mysqlops mysql = new db_mysqlops();
     FN_toJSON json = new FN_toJSON();
     var_env env = new var_env();
+
+    static appendLog log = new appendLog();
+    static String stid;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,23 +48,48 @@ public class API_courseSearch extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
 
             String methodName, userIdentification, currentCriteria, searchKey, updateCriteria;
+            int courseScore, courseid;
             methodName = request.getParameter("methodName").trim();
-            userIdentification = request.getParameter("usrid").trim();
-            searchKey = request.getParameter("key").replace("%20", " ").trim();
+// ops1 :
+            if (methodName.equals("searchCourse")) {
+                userIdentification = request.getParameter("usrid").trim();
+                searchKey = request.getParameter("key").replace("%20", " ").trim();
+//    DEBUG:            /API_courseSearch?usrid=AHMSH0001&methodName=searchCourse&key=AI
+//            log search history
+                log.log_userSearchHistory(userIdentification, searchKey);
 
-            if ("logSearchKey".equals(methodName)) {
+                cb.calculateCourseSimilarities("Database Management","Computer Science", "Computer Programming", 1000, 4000, "South East England", 1.1, false);
+
+                for (Map.Entry c : cb.ContenetBasedScoreMap.entrySet()) {
+                    log.log_courseSearchHistory(c.getKey().toString(), c.getValue().toString());
+
+                }
+// ops2 : 
+            } else if (methodName.equals("scoreCourse")) {
+//    DEBUG:    /API_courseSearch?usrid=AHMSH0001&methodName=scoreCourse&courseid=1&courseScore=3
+                userIdentification = request.getParameter("usrid").trim();
+                courseid = Integer.parseInt(request.getParameter("courseid"));
+                courseScore = Integer.parseInt(request.getParameter("courseScore"));
+                String cr, cc, csc, courseCriteria;
+//                get course criteria 
                 mysql.openmySQLconnection();
-                mysql.executeSQLquery_stringRS2(env.dq_getCurrentCriteria(userIdentification), 0);
-                mysql.rs.next();
-                currentCriteria = mysql.rs.getString(1);
-                mysql.closemySQLconnection();
-                updateCriteria = currentCriteria + "-" + searchKey;
-//                update currentCriteria with the search key 
-                mysql.openmySQLconnection();
-                mysql.executeSQL(env.dq_updateCurrentCriteria(userIdentification, updateCriteria, searchKey));
-                mysql.closemySQLconnection();
-                
-//                get all courses where course_field = search key
+                ResultSet rs = mysql.executeSQLquery_stringRS2("select course_rootClass,course_class,course_Subclass"
+                        + " from datset.courses_postgrad where id=" + courseid + "", 0);
+
+                while (rs.next()) {
+                    cr = rs.getString("course_rootClass");
+                    cc = rs.getString("course_class");
+                    csc = rs.getString("course_Subclass");
+                    courseCriteria = log.concat_generateCourseCriteria(courseid, cr, cc, csc);
+                    mysql.closemySQLconnection();
+//                    done
+//                  log values in course search score 
+                    mysql.openmySQLconnection();
+                    mysql.executeSQL(env.dq_insertCourseSearchScore(courseid, courseScore, courseCriteria, userIdentification));
+                    mysql.closemySQLconnection();
+
+                    out.print("courserid: " + courseid + "</br>" + "courseScore: " + courseScore + "</br>");
+                }
 
             }
 

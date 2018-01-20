@@ -39,7 +39,7 @@ public class var_env {
     public String dq_getnss = "SELECT * FROM DATSET.uni_nss_scoring";
 //    item weight
     public String dq_itemweight = "SELECT * FROM DATSET.usr_item_weight";
-    
+
     public String dq_Courseitemweight = "SELECT * FROM DATSET.course_item_weight";
 //  user profile data
     public String dq_usrProfile = "SELECT * FROM DATSET.usr_contact_dat a inner join \n"
@@ -63,7 +63,7 @@ public class var_env {
 
     }
 
-    public String dq_insertUserEduInfo(String uid, String uedbck, String eduqual, String edulang, String eduski,String usrcrit) {
+    public String dq_insertUserEduInfo(String uid, String uedbck, String eduqual, String edulang, String eduski, String usrcrit) {
         String q_edu = "INSERT INTO DATSET.usr_edu_dat (usr_id,usr_education_background,usr_current_qualification,usr_language,usr_skills,usr_criteria) VALUES ('" + uid + "','" + uedbck + "','" + eduqual + "','" + edulang + "','" + eduski + "','" + usrcrit + "')";
 
         return q_edu;
@@ -270,17 +270,13 @@ public class var_env {
     public double getAvailablePercentage() throws Exception {
         double p, t;
         mysql.openmySQLconnection();
-        String qureyResult =mysql.executeSQLquery_stringRS("select sum(item_weight) from DATSET.usr_item_weight", 1);
-        
-        
-        if (qureyResult == null )
-        {
-            qureyResult= "0";
-        t = Double.parseDouble(qureyResult);
-        }
-        else
-        {
-        t = Double.parseDouble(qureyResult);    
+        String qureyResult = mysql.executeSQLquery_stringRS("select sum(item_weight) from DATSET.usr_item_weight", 1);
+
+        if (qureyResult == null) {
+            qureyResult = "0";
+            t = Double.parseDouble(qureyResult);
+        } else {
+            t = Double.parseDouble(qureyResult);
         }
         mysql.closemySQLconnection();
 
@@ -292,20 +288,16 @@ public class var_env {
         return p;
     }
 
-     public double getAvailablePercentage_course() throws Exception {
+    public double getAvailablePercentage_course() throws Exception {
         double p, t;
         mysql.openmySQLconnection();
-        String qureyResult =mysql.executeSQLquery_stringRS("select sum(item_weight) from DATSET.course_item_weight", 1);
-        
-        
-        if (qureyResult == null )
-        {
-            qureyResult= "0";
-        t = Double.parseDouble(qureyResult);
-        }
-        else
-        {
-        t = Double.parseDouble(qureyResult);    
+        String qureyResult = mysql.executeSQLquery_stringRS("select sum(item_weight) from DATSET.course_item_weight", 1);
+
+        if (qureyResult == null) {
+            qureyResult = "0";
+            t = Double.parseDouble(qureyResult);
+        } else {
+            t = Double.parseDouble(qureyResult);
         }
         mysql.closemySQLconnection();
 
@@ -325,7 +317,8 @@ public class var_env {
 
         return q;
     }
-       public String dq_insertItemWeight_course(String itemName, double itemWeight) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, InstantiationException, Exception {
+
+    public String dq_insertItemWeight_course(String itemName, double itemWeight) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, InstantiationException, Exception {
         String q;
 
 //        generate an id 
@@ -342,8 +335,7 @@ public class var_env {
 
         return q;
     }
-    
-    
+
     public String dq_updateCourseItem(int recNumber, String itemName, double itemWeight) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, InstantiationException, Exception {
         String q;
 
@@ -352,7 +344,6 @@ public class var_env {
 
         return q;
     }
-
 
     public String dq_insertCourselevel(String levelName, String levelOrder) {
         String q;
@@ -367,17 +358,54 @@ public class var_env {
 
         return q;
     }
+
+    public String dq_getCurrentCriteria(String usrid) {
+        String q_contact = "SELECT usr_criteria FROM DATSET.usr_edu_dat where usr_id = '" + usrid + "'";
+
+        return q_contact;
+
+    }
+
+    public String dq_updateCurrentCriteria(String usrid, String usrcrit, String sk, String tid) {
+        String q_contact = "insert into DATSET.usr_search_history (usr_id,usr_criteria,usr_searchkey,transaction_id) values ('" + usrid + "','" + usrcrit + "','" + sk + "','" + tid + "');";
+
+        return q_contact;
+
+    }
+
+    public String dq_getRelatedSearchHistory(String criteria) {
+        String q = "select * from datset.courses_search_history a inner join DATSET.course_search_score b\n"
+                + "on a.transaction_id = b.transaction_id\n"
+                + "where a.transaction_id = '" + criteria + "'\n"
+                + "order by b.course_score desc;";
+        return q;
+
+    }
+
+    public String dq_insertCourseSearchHistory(String id, String sim, String tid) {
+        String q = "insert into DATSET.courses_search_history (course_id,course_similarity,transaction_id)\n"
+                + "values ('" + id + "','" + sim + "','" + tid + "')";
+
+        return q;
+    }
+
+    public String dq_insertCourseSearchScore(int cid, int cscore, String ccriteria, String cuid) {
+        String q = "insert into DATSET.course_search_score (course_id,course_score,course_criteria,user_id)\n"
+                + "values\n"
+                + "(" + cid + "," + cscore + ",'" + ccriteria + "','" + cuid + "')";
+        return q;
+
+    }
     
-       public String dq_getCurrentCriteria(String usrid) {
-        String q_contact = "SELECT usr_criteria FROM DATSET.usr_edu_dat where usr_id = '"+usrid+"'";
-
-        return q_contact;
-
-    }
-         public String dq_updateCurrentCriteria(String usrid,String usrcrit,String sk) {
-        String q_contact = "insert into DATSET.usr_search_history (usr_id,usr_criteria,usr_searchkey) values ('"+usrid+"','"+usrcrit+"','"+sk+"');";
-
-        return q_contact;
-
-    }
+//   
+   public String dq_COB_getAverageCourseScore(String courseId) {
+        String q = " select avg(course_score) \"avg\" from datset.course_search_score where course_id ="+courseId;
+        return q;
+   }
+//   
+    public String dq_CB_getCoursesBySubClass(String subclass) {
+        String q = "select * from datset.courses_postgrad where uni_nss is not null and course_fees_uk !='' "
+                + " and course_subclass = '"+subclass+"' ";
+        return q;
+   }
 }

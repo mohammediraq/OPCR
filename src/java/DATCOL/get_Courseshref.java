@@ -20,7 +20,7 @@ public class get_Courseshref {
     static BUSLOGIC.coursesModuler cm = new BUSLOGIC.coursesModuler();
     private static Connection con = null;
     private static Statement stmt = null;
-    public static String search_language, course_language, search_key, course_startdate, course_field, course_fees, course_feesplan, course_wprovider, uni_address, uni_postal, course_entryrequirements, course_name, course_url, course_desc, course_time, course_title, course_qualification, course_duration, course_location, course_mode, course_assessment, course_requirements, course_fee_int, course_fee_uk;
+    public static String courseRoot ,courseClass,courseSubClass,search_language, course_language, search_key, course_startdate, course_field, course_fees, course_feesplan, course_wprovider, uni_address, uni_postal, course_entryrequirements, course_name, course_url, course_desc, course_time, course_title, course_qualification, course_duration, course_location, course_mode, course_assessment, course_requirements, course_fee_int, course_fee_uk;
 
     /**
      * @param args the command line arguments
@@ -31,8 +31,12 @@ public class get_Courseshref {
             for (int pageNum = 1; pageNum < 30; pageNum++) {
 
                 search_language = "English";
-                search_key = "Computer Animation";
-
+                search_key = "Database Management";
+                courseRoot= "Engineering";
+                courseClass = "Computer Science";
+                courseSubClass="Database Management";
+                
+                
                 //get course url
                 String URL = "https://digital.ucas.com/search/results?SearchText=" + search_key.replace(" ", "+") + "&AutoSuggestType=&SearchType=searchbarbutton&PreviouslyAppliedFilters=D_0_Postgraduate__&filters=Destination_Postgraduate&ProviderText=&SubjectText=&DistanceFromPostcode=1mi&RegionDistancePostcode=&SortOrder=0&CurrentView=List&pageNumber=" + pageNum;
                 org.jsoup.nodes.Document doc2 = Jsoup.connect(URL).get();
@@ -66,13 +70,13 @@ public class get_Courseshref {
 
 //                      set a clean data model
                         course_url = urlList[i];
-                        course_desc = courseDesc;
+                        course_desc = courseDesc.replace("'", "\'");
                         course_time = courseTime;
-                        course_title = courseTitle;
-                        course_qualification = courseQualification;
+                        course_title = courseTitle.replace("'", "\'");
+                        course_qualification = courseQualification.replace("'", "\'");
                         course_duration = courseDuration;
                         course_location = courseLocation;
-                        course_entryrequirements = courseEntryRequirements;
+                        course_entryrequirements = courseEntryRequirements.replace("'", "\'");
                         course_fees = courseFees;
                         course_startdate = courseStartDate;
                         course_wprovider = providerWebSite;
@@ -81,7 +85,10 @@ public class get_Courseshref {
                         course_language = search_language;
                         uni_address = uniAddress;
                         uni_postal = uniPostalCode;
-
+                        if ("".equals(course_fees))
+                        {
+                            course_fees ="0";
+                        }
                         String query = "insert into `DATSET`.`courses_postgrad` ("
                                 + "`course_URL`,\n"
                                 + "`course_desc`,\n"
@@ -98,7 +105,10 @@ public class get_Courseshref {
                                 + "`course_wprovider`,\n"
                                 + "`course_location`,\n"
                                 + "`uni_address`,\n"
-                                + "`uni_postal`)\n"
+                                + "`uni_postal`,\n"
+                                + "`course_rootClass`,\n"
+                                + "`course_class`,\n"
+                                + "`course_subclass`)\n"
                                 + " values ('"
                                 + "" + course_url + "',"
                                 + "'" + course_desc + "',"
@@ -115,7 +125,10 @@ public class get_Courseshref {
                                 + "'" + course_wprovider + "',"
                                 + "'" + course_location + "',"
                                 + "'" + uni_address + "',"
-                                + "'" + uni_postal + "');";
+                                + "'" + uni_postal + "',"
+                                + "'" + courseRoot + "',"
+                                + "'" + courseClass + "',"
+                                + "'" + courseSubClass + "');";
 
 //                        System.out.print(i + ": " + course_name + "- Page# " + pageNum + "- Courses# " + urlList.length + " \n" + course_url + "\n");
                         Statement st = con.createStatement();
