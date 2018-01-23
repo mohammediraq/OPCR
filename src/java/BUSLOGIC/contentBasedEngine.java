@@ -142,6 +142,8 @@ public class contentBasedEngine {
 
 //    Calcuate Course title similarity 
     public double cal_courseTitleSimilarity(String searchKey, String courseTitle) {
+
+        similarityCourseTitle = 0.0;
         String wc[] = courseTitle.split(" ");
         String searchKeyWords[] = searchKey.split(" ");
 
@@ -192,6 +194,8 @@ public class contentBasedEngine {
 //        by the UCAS website and logged by the Crawler
 //        *Seperate functions for future purposes
 //         the returned value will be course_field% similarity + course_qualifications% similarity
+
+        similarityCourseMajor = 0.0;
         String userMajorWords[] = userMajor.split(" ");
         String courseFieldWords[] = courseField.split(" ");
         String courseQualificaitonsWords[] = courseQual.split(" ");
@@ -274,7 +278,7 @@ public class contentBasedEngine {
                 String uniRegion = rs.getString("Region");
 
                 if (userLocation.equals(uniRegion)) {
-                    similarityCourseLocation = iwCourseLocation / 100;
+                    similarityCourseLocation = 0.1;
                 } else {
                     similarityCourseLocation = 0.0;
                 }
@@ -328,9 +332,9 @@ public class contentBasedEngine {
     public double cal_universityNSS(double userInputMinScore, double universityNSS) {
 //        ex.userInputMinScore = 90 ==> will get all Ranks >= 90%
 //        calculates the similarity 
-
+        similarityNSS = 0.0;
         if (userInputMinScore <= universityNSS) {
-            similarityNSS = (userInputMinScore / universityNSS);
+            similarityNSS = (userInputMinScore / universityNSS)/10;
         } else {
             similarityNSS = 0.0;
         }

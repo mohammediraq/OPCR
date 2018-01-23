@@ -47,18 +47,25 @@ public class API_courseSearch extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
-            String methodName, userIdentification, currentCriteria, searchKey, updateCriteria;
+            String methodName, userIdentification, currentCriteria, searchKey, updateCriteria, user_major, user_subclass,user_region;
             int courseScore, courseid;
-            methodName = request.getParameter("methodName").trim();
+            double courseMinFees,courseMaxFees,minNSS;
+                methodName = request.getParameter("methodName").trim();
 // ops1 :
             if (methodName.equals("searchCourse")) {
+                courseMinFees = Double.parseDouble(request.getParameter("coursemin").trim());
+                courseMaxFees = Double.parseDouble(request.getParameter("coursemx").trim());
+                minNSS = Double.parseDouble(request.getParameter("nss").trim());
+                user_major = request.getParameter("um").replace("%20", " ").trim();
+                user_region = request.getParameter("ur").replace("%20", " ").trim();
+                user_subclass = request.getParameter("sc").trim();
                 userIdentification = request.getParameter("usrid").trim();
                 searchKey = request.getParameter("key").replace("%20", " ").trim();
 //    DEBUG:            /API_courseSearch?usrid=AHMSH0001&methodName=searchCourse&key=AI
 //            log search history
                 log.log_userSearchHistory(userIdentification, searchKey);
 
-                cb.calculateCourseSimilarities("Database Management","Computer Science", "Computer Programming", 1000, 4000, "South East England", 1.1, false);
+                cb.calculateCourseSimilarities(user_subclass, searchKey, user_major, courseMinFees, courseMaxFees,user_region,minNSS, true);
 
                 for (Map.Entry c : cb.ContenetBasedScoreMap.entrySet()) {
                     log.log_courseSearchHistory(c.getKey().toString(), c.getValue().toString());
