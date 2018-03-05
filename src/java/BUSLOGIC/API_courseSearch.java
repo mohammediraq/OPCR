@@ -6,6 +6,7 @@
 package BUSLOGIC;
 
 import static BUSLOGIC.testingClass.calculateCourseSimilarities;
+import static BUSLOGIC.testnewcorefunctions.core;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
@@ -25,10 +26,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class API_courseSearch extends HttpServlet {
 
-    contentBasedEngine cb = new contentBasedEngine();
+    coreEngine core = new coreEngine();
+//    contentBasedEngine core = new contentBasedEngine();
     db_mysqlops mysql = new db_mysqlops();
     FN_toJSON json = new FN_toJSON();
     var_env env = new var_env();
+    testingColBased test = new testingColBased();
 
     static appendLog log = new appendLog();
     static String stid;
@@ -47,10 +50,10 @@ public class API_courseSearch extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
-            String methodName, userIdentification, currentCriteria, searchKey, updateCriteria, user_major, user_subclass,user_region;
+            String methodName, userIdentification, currentCriteria, searchKey, updateCriteria, user_major, user_subclass, user_region;
             int courseScore, courseid;
-            double courseMinFees,courseMaxFees,minNSS;
-                methodName = request.getParameter("methodName").trim();
+            double courseMinFees, courseMaxFees, minNSS;
+            methodName = request.getParameter("methodName").trim();
 // ops1 :
             if (methodName.equals("searchCourse")) {
                 courseMinFees = Double.parseDouble(request.getParameter("coursemin").trim());
@@ -61,16 +64,23 @@ public class API_courseSearch extends HttpServlet {
                 user_subclass = request.getParameter("sc").trim();
                 userIdentification = request.getParameter("usrid").trim();
                 searchKey = request.getParameter("key").replace("%20", " ").trim();
-//    DEBUG:            /API_courseSearch?usrid=AHMSH0001&methodName=searchCourse&key=AI
+//    DEBUG:/API_courseSearch?usrid=AHMSH0001&methodName=searchCourse&key=AI
 //            log search history
-                log.log_userSearchHistory(userIdentification, searchKey);
 
-                cb.calculateCourseSimilarities(user_subclass, searchKey, user_major, courseMinFees, courseMaxFees,user_region,minNSS, true);
+//                core.map_COBFinalScore.clear();
+//                core.map_contentBasedFinalScore.clear();
 
-                for (Map.Entry c : cb.ContenetBasedScoreMap.entrySet()) {
-                    log.log_courseSearchHistory(c.getKey().toString(), c.getValue().toString());
+                log.log_userSearchHistory(userIdentification, searchKey, user_subclass);
+//              get gvars of all weights
+//              identifying gvars for initial vars calls.
+                
+                core.setSearchProperties(user_major, user_subclass, searchKey, user_region, minNSS, courseMinFees, courseMaxFees);
+                
+//                core.COB_checkKNNSimilarity(userIdentification);
+                   //core.CB_calculateCourseSimilarities();
+                   // core.cal_UniversityRank(7);
+                   core.cal_UniversityNSS(80.0);
 
-                }
 // ops2 : 
             } else if (methodName.equals("scoreCourse")) {
 //    DEBUG:    /API_courseSearch?usrid=AHMSH0001&methodName=scoreCourse&courseid=1&courseScore=3

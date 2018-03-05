@@ -27,7 +27,7 @@ public class appendLog {
     var_env env = new var_env();
 
 //    log user's search history
-    public void log_userSearchHistory(String userIdentification, String searchKey) throws ServletException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, Exception {
+    public void log_userSearchHistory(String userIdentification, String searchKey, String usubclass) throws ServletException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, Exception {
         tid = getTrackingKey().toString();
 //
         mysql.openmySQLconnection();
@@ -35,11 +35,11 @@ public class appendLog {
         mysql.rs.next();
         String currentCriteria = mysql.rs.getString(1);
         mysql.closemySQLconnection();
-        String updateCriteria = currentCriteria + "-" + searchKey;
+        String updateCriteria = currentCriteria;
 //                update currentCriteria with the search key 
         log_checkRelatedSearches(updateCriteria);
         mysql.openmySQLconnection();
-        mysql.executeSQL(env.dq_updateCurrentCriteria(userIdentification, updateCriteria, searchKey, tid));
+        mysql.executeSQL(env.dq_updateCurrentCriteria(userIdentification, updateCriteria, searchKey, tid, usubclass));
         mysql.closemySQLconnection();
     }
 
@@ -91,13 +91,11 @@ public class appendLog {
             }
         }
     }
-    
-    public String concat_generateCourseCriteria(int courseId,String root,String className,String subClass)
-    {
-        String courseCriteria ;
-        courseCriteria =courseId+"-"+root+"-"+className+"-"+subClass;
-        
-        
+
+    public String concat_generateCourseCriteria(int courseId, String root, String className, String subClass) {
+        String courseCriteria;
+        courseCriteria = courseId + "-" + root + "-" + className + "-" + subClass;
+
         return courseCriteria;
     }
 

@@ -71,7 +71,7 @@ public class contentBasedEngine {
             System.out.print("\n ======= \n");
             ContenetBasedScoreMap.put(r.getString("id"), totalCourseScore);
 //==>
-//            testingCOB.appendRandomScores(r.getString("id").toString());
+            testingCOB.appendRandomScores(r.getInt("id"));
         }
         mysql.closemySQLconnection();
         for (Map.Entry m : ContenetBasedScoreMap.entrySet()) {

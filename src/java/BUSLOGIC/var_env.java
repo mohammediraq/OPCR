@@ -366,8 +366,12 @@ public class var_env {
 
     }
 
-    public String dq_updateCurrentCriteria(String usrid, String usrcrit, String sk, String tid) {
-        String q_contact = "insert into DATSET.usr_search_history (usr_id,usr_criteria,usr_searchkey,transaction_id) values ('" + usrid + "','" + usrcrit + "','" + sk + "','" + tid + "');";
+    public String dq_updateCurrentCriteria(String usrid, String usrcrit, String sk, String tid, String usubclass) {
+        String q_contact = "insert into DATSET.usr_search_history (usr_id,usr_criteria,usr_searchkey,transaction_id,usr_class,usr_region,usr_background) values ('" + usrid + "','" + usrcrit + "','" + sk + "','" + tid + "',(SELECT a.class_name \n"
+                + "FROM DATSET.conf_classes a inner join conf_subclasses b \n"
+                + "on a.class_id = b.class_id\n"
+                + "where b.subclass_name = '" + usubclass + "'),(SELECT usr_region from datset.usr_contact_dat where usr_id='" + usrid + "'),"
+                + "(SELECT usr_education_background from datset.usr_edu_dat where usr_id='" + usrid + "'));";
 
         return q_contact;
 
@@ -396,16 +400,90 @@ public class var_env {
         return q;
 
     }
-    
+
 //   
-   public String dq_COB_getAverageCourseScore(String courseId) {
-        String q = " select avg(course_score) \"avg\" from datset.course_search_score where course_id ="+courseId;
+    public String dq_COB_getAverageCourseScore(String courseId) {
+        String q = " select avg(course_score) \"avg\" from datset.course_search_score where course_id =" + courseId;
         return q;
-   }
+    }
 //   
+    
+    
+    public String dq_NSS_getMinAndMaxScores()
+    {
+        
+        String q = "SELECT min(nss_overall)'min nss',max(nss_overall)'max nss'  FROM DATSET.uni_nss_scoring";
+        return q;
+    }
+
     public String dq_CB_getCoursesBySubClass(String subclass) {
         String q = "select * from datset.courses_postgrad where uni_nss is not null and course_fees_uk !='' "
-                + " and course_subclass = '"+subclass+"' ";
+                + " and course_subclass = '" + subclass + "' ";
         return q;
-   }
+    }
+    
+    
+    public String dq_UniRank_getMaxRanks() {
+        String q = "SELECT max(recid) FROM DATSET.uni_nss_scoring ";
+        return q;
+    }
+
+    public String dq_COB_getTopSimilarProfiles(String searchKey, String userid, int resultLimit) {
+        String q = "select count(usr_searchkey) 'search_key',usr_id \n"
+                + "from  datset.usr_search_history\n"
+                + "where \n"
+                + "usr_searchkey =  '" + searchKey + "'\n"
+                + "and usr_region = (select usr_region from datset.usr_search_history where usr_id ='" + userid + "' limit 1  )\n"
+                + "and usr_class = (select usr_class from datset.usr_search_history where usr_id ='" + userid + "' limit 1  )\n"
+                + "and usr_background = (select usr_background from datset.usr_search_history where usr_id ='" + userid + "' limit 1  )\n"
+                + "and usr_id != '" + userid + "'\n"
+                + "group by 2 \n"
+                + "order by 1 desc\n"
+                + "limit " + resultLimit + "";
+
+        return q;
+    }
+
+    public String dq_COB_getAverageCoursesScore(String courseidList, String useridList) {
+        String q = "select round(avg(course_score)) 'course_score',course_id,user_id \n"
+                + "from datset.course_search_score\n"
+                + "where\n"
+                + "course_id in (" + courseidList + ")\n"
+                + "and \n"
+                + "user_id in (" + useridList + ") \n"
+                + "group by 3,2\n"
+                + "order by 1 desc";
+        return q;
+    }
+
+    public String dq_COB_getAverageCoursesScorePerCourse(String courseidList) {
+        String q = "select round(avg(course_score)) 'course_score',course_id \n"
+                + "from datset.course_search_score\n"
+                + "where\n"
+                + "course_id in (" + courseidList + ")\n"
+                + "group by 2\n"
+                + "order by 1 desc";
+        return q;
+    }
+
+
+
+public String dq_COB_getSimilarProfilesRatings(String userid) {
+//        matching users by class,location and user major.
+        String q = "select a.course_id,a.course_score,a.user_id,b.usr_class,b.usr_background,b.usr_region\n"
+                + "from \n"
+                + "course_search_score a \n"
+                + "inner join usr_search_history b\n"
+                + "on a.user_id = b.usr_id\n"
+                + "where \n"
+                + "b.usr_region = (select usr_region from usr_search_history where usr_id = '" + userid + "' limit 1)\n"
+                + "and\n"
+                + "b.usr_class = (select usr_class from usr_search_history where usr_id ='" + userid + "' limit 1)\n"
+                + "and\n"
+                + "b.usr_background = (select usr_background from usr_search_history where usr_id ='" + userid + "' limit 1) \n"
+                + " and b.usr_id != '" + userid + "'\n"
+                + "order by 1 asc,2 desc, 3 asc";
+
+        return q;
+    }
 }

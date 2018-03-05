@@ -23,10 +23,11 @@ public class testingColBased {
      */
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, SQLException, IllegalAccessException, Exception {
         // TODO code application logic here
+        
    
     }
 
-    public static void appendRandomScores(String courseId) throws ClassNotFoundException, InstantiationException, SQLException, IllegalAccessException, Exception {
+    public static void appendRandomScores(int courseId) throws ClassNotFoundException, InstantiationException, SQLException, IllegalAccessException, Exception {
         mysql.openmySQLconnection();
         mysql.executeSQL("insert into DATSET.course_search_score (course_id,course_score) values ("+courseId+","+generateRandomScore()+")");
         mysql.closemySQLconnection();

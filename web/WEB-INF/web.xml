@@ -96,6 +96,10 @@
         <servlet-name>API_courseSearch</servlet-name>
         <servlet-class>BUSLOGIC.API_courseSearch</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>testSpringy</servlet-name>
+        <servlet-class>BUSLOGIC.testSpringy</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>get_CoursesUCAS</servlet-name>
         <url-pattern>/get_CoursesUCAS</url-pattern>
@@ -191,6 +195,10 @@
     <servlet-mapping>
         <servlet-name>API_courseSearch</servlet-name>
         <url-pattern>/API_courseSearch</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>testSpringy</servlet-name>
+        <url-pattern>/testSpringy</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
