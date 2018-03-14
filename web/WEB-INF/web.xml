@@ -12,6 +12,8 @@
         <servlet-name>API_getUserEmail</servlet-name>
         <servlet-class>BUSLOGIC.API_getUserEmail</servlet-class>
     </servlet>
+    
+    
     <servlet>
         <servlet-name>API_getedubackground</servlet-name>
         <servlet-class>BUSLOGIC.API_getedubackground</servlet-class>
@@ -97,12 +99,20 @@
         <servlet-class>BUSLOGIC.API_courseSearch</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>testSpringy</servlet-name>
-        <servlet-class>BUSLOGIC.testSpringy</servlet-class>
+        <servlet-name>API_findCourse</servlet-name>
+        <servlet-class>BUSLOGIC.API_findCourse</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>test</servlet-name>
+        <servlet-class>BUSLOGIC.test</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>get_CoursesUCAS</servlet-name>
         <url-pattern>/get_CoursesUCAS</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>API_findCourse</servlet-name>
+        <url-pattern>/API_findCourse</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>API_getAllRegionsCounties</servlet-name>
@@ -197,8 +207,8 @@
         <url-pattern>/API_courseSearch</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>testSpringy</servlet-name>
-        <url-pattern>/testSpringy</url-pattern>
+        <servlet-name>test</servlet-name>
+        <url-pattern>/test</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

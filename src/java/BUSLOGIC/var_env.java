@@ -42,9 +42,7 @@ public class var_env {
 
     public String dq_Courseitemweight = "SELECT * FROM DATSET.course_item_weight";
 //  user profile data
-    public String dq_usrProfile = "SELECT * FROM DATSET.usr_contact_dat a inner join \n"
-            + "DATSET.usr_edu_dat b \n"
-            + "on a.usr_id = b.usr_id ";
+    public String dq_usrProfile = "SELECT * FROM DATSET.usr_contact_dat ";
 //   
 
     public String dq_getAllClasses = "SELECT * FROM datset.conf_classes a right join datset.conf_subclasses b on a.recid= b.recid";
@@ -56,19 +54,14 @@ public class var_env {
     public String q_insertClass = null;
     public String q_insertSubClass = null;
 
-    public String dq_insertUserContactInfo(String uid, String ufn, String umn, String uln, String uad, String ucn, String uem, String umo) {
-        String q_contact = "insert into DATSET.usr_contact_dat (usr_id,usr_first_name,usr_last_name,usr_mid_name,usr_address,usr_city,usr_region,usr_email,usr_mobile) values ('" + uid + "','" + ufn + "','" + uln + "','" + umn + "','" + uad + "','" + ucn + "',(select distinct(region) from DATSET.uk_countries where city ='" + ucn + "'),'" + uem + "','" + umo + "')";
+    public String dq_insertUserContactInfo(String uid, String ufn, String umn, String uln, String uad, String ucn, String uem, String umo,String uedbck, String eduqual, String edulang, String eduski, String usrcrit) {
+        String q_contact = "insert into DATSET.usr_contact_dat (usr_id,usr_first_name,usr_last_name,usr_mid_name,usr_address,usr_city,usr_region,usr_email,usr_mobile,usr_education_background,usr_current_qualification,usr_language,usr_skills,usr_criteria) values ('" + uid + "','" + ufn + "','" + uln + "','" + umn + "','" + uad + "','" + ucn + "',(select distinct(region) from DATSET.uk_countries where city ='" + ucn + "'),'" + uem + "','" + umo + "','" + uedbck + "','" + eduqual + "','" + edulang + "','" + eduski + "','" + usrcrit + "')";
 
         return q_contact;
 
     }
 
-    public String dq_insertUserEduInfo(String uid, String uedbck, String eduqual, String edulang, String eduski, String usrcrit) {
-        String q_edu = "INSERT INTO DATSET.usr_edu_dat (usr_id,usr_education_background,usr_current_qualification,usr_language,usr_skills,usr_criteria) VALUES ('" + uid + "','" + uedbck + "','" + eduqual + "','" + edulang + "','" + eduski + "','" + usrcrit + "')";
-
-        return q_edu;
-
-    }
+  
 
     public String createUID(String fn, String ln) throws ClassNotFoundException, InstantiationException, IllegalAccessException, Exception {
         String uid = null, recOrder = null, fnCode, lnCode;
@@ -91,6 +84,12 @@ public class var_env {
         return uid;
     }
 
+    public String getProfileByID (String id )
+    {
+        String q ="SELECT * FROM DATSET.usr_contact_dat where usr_id= '"+id+"'";
+        return q;
+    }
+    
     public void dq_insertClassConf(String careerName, String className, String subClassName) throws ClassNotFoundException, SQLException, IllegalAccessException, InstantiationException, Exception {
 
 //set an order for the class 
@@ -418,7 +417,7 @@ public class var_env {
 
     public String dq_CB_getCoursesBySubClass(String subclass) {
         String q = "select * from datset.courses_postgrad where uni_nss is not null and course_fees_uk !='' "
-                + " and course_subclass = '" + subclass + "' ";
+                + " and course_subclass = '" + subclass + "' limit 1000";
         return q;
     }
     

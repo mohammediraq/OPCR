@@ -83,13 +83,29 @@ public class db_mysqlops {
         return rs.getString(col);
     }
 
-    public ResultSet executeSQLquery_stringRS2(String q, int col) throws SQLException, Exception {
-
+    public ResultSet executeSQLquery_WithRS(String q) throws SQLException, Exception {
+        ResultSet rset = null;
         try {
 
             Statement st = con.createStatement();
-            rs = st.executeQuery(q);
+            rset = st.executeQuery(q);
+            rset.next();
 
+        } catch (Exception ex) {
+
+        }
+
+        return rset;
+    }
+
+    public ResultSet executeSQLquery_stringRS2(String q, int col) throws SQLException, Exception {
+
+        try {
+            
+
+            Statement st = con.createStatement();
+            rs = st.executeQuery(q);
+      
         } catch (Exception ex) {
 
         }

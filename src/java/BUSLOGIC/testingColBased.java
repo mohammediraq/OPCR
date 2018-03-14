@@ -5,7 +5,9 @@
  */
 package BUSLOGIC;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Random;
 
 /**
@@ -23,8 +25,17 @@ public class testingColBased {
      */
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, SQLException, IllegalAccessException, Exception {
         // TODO code application logic here
-        
-   
+           for (int i = 0; i < 6; i++) {
+       mysql.openmySQLconnection();
+       Statement st = mysql.con.createStatement();
+       ResultSet o = st.executeQuery("SELECT * FROM DATSET.courses_postgrad limit 1000");
+       while (o.next())
+       {
+           appendRandomScores(o.getInt("id"));
+       }
+     
+            
+        }
     }
 
     public static void appendRandomScores(int courseId) throws ClassNotFoundException, InstantiationException, SQLException, IllegalAccessException, Exception {

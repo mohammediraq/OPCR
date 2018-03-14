@@ -62,11 +62,11 @@ public class API_insertNewUser extends HttpServlet {
                 usr_id = env.createUID(usr_first_name, usr_last_name);
                 
 //          Generating queries for adding new user
-                userConInfo = env.dq_insertUserContactInfo(usr_id, usr_first_name, usr_mid_name, usr_last_name, usr_address, usr_city, usr_email, usr_mobile);
-                userEduInfo = env.dq_insertUserEduInfo(usr_id, usr_education_background, usr_current_qualification, usr_language, usr_skills,usr_criteria);
+                userConInfo = env.dq_insertUserContactInfo(usr_id, usr_first_name, usr_mid_name, usr_last_name, usr_address, usr_city, usr_email, usr_mobile, usr_education_background, usr_current_qualification, usr_language, usr_skills,usr_criteria);
+                
                 mysql.openmySQLconnection();
                 mysql.executeSQL(userConInfo);
-                mysql.executeSQL(userEduInfo);
+                
 
                 mysql.closemySQLconnection();
                 m = json.printJson("addingUserResponse", "Thanks " + usr_first_name + " for registeration!");

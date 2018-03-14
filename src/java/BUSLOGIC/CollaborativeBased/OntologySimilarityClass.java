@@ -46,7 +46,7 @@ public class OntologySimilarityClass {
 //
 //    }
 
-    public static double Calculate_OntologySimilarity(ArrayList UserA_props,ArrayList UserB_props) {
+    public  double Calculate_OntologySimilarity(ArrayList UserA_props,ArrayList UserB_props) {
 //
 //        ArrayList UserA_props = new ArrayList();
 //        ArrayList UserB_props = new ArrayList();
@@ -55,19 +55,6 @@ public class OntologySimilarityClass {
 //         => list of Uxx profiles and features.
 //         <= list of similarity scores for Ua and other users.
 //
-//        UserA_props.add("Computer Science1");
-//        UserA_props.add("Computer Programming");
-//        UserA_props.add("Java Programming");
-//        UserA_props.add("Tech Leading");
-//        UserA_props.add("London111");
-//        UserA_props.add("Coding");
-//
-//        UserB_props.add("Computer Science");
-//        UserB_props.add("Computer Programming");
-//        UserB_props.add("Java Programming");
-//        UserB_props.add("Tech Leading");
-//        UserB_props.add("London12");
-//        UserB_props.add("Coding1");
 
 
         double score= CompareProfilesProps(UserA_props, UserB_props);
@@ -83,6 +70,7 @@ public class OntologySimilarityClass {
 
             switch (propOrder) {
                 case 0:
+                    //subclass
                     if (el1 == null ? el2 == null : el1.equals(el2)) {
                         Ontology_Similarity_Coursescore += listOfVars.SubClass_Similarity;
                         break;

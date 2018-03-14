@@ -5,13 +5,22 @@
  */
 package BUSLOGIC;
 
+import BUSLOGIC.CollaborativeBased.CollaborativeBasedClass;
 import static BUSLOGIC.contentBasedEngine.foundSimilarity;
 import static BUSLOGIC.contentBasedEngine.mysql;
+import static BUSLOGIC.db_mysqlops.con;
+import static BUSLOGIC.db_mysqlops.rs;
+import RecommenderSystem.sortedMap;
+import java.util.Comparator;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +33,9 @@ public class coreEngineSubProccess {
     static db_mysqlops mysql = new db_mysqlops();
     static FN_toJSON json = new FN_toJSON();
     static var_env env = new var_env();
+    static BUSLOGIC.CollaborativeBased.CollaborativeBasedClass COB = new CollaborativeBasedClass();
+    static RecommenderSystem.CommonRatedCalculator CommonRate = new RecommenderSystem.CommonRatedCalculator();
+
     static ResultSet rs;
     static ResultSet coursesObject;
 
@@ -34,9 +46,8 @@ public class coreEngineSubProccess {
     static double sim_courseLocation;
     static double sim_courseFees;
 //    
-    
-//
 
+//
     static double core_contentBasedWeight;
     static double core_collaborativeBasedWeight;
     static double core_universityRankWeight;
@@ -49,6 +60,16 @@ public class coreEngineSubProccess {
 
 //  
 //    
+    //    User's profile vars.
+    static String userMajor;
+    static String userSubclass;
+    static String userSearchkey;
+    static String userRegion;
+    static double minimumNSS;
+    static double maxFees;
+    static double minFees;
+//    
+
     //   Content-based item weights
     static double contentBased_courseTitleWeight;
     static double contentBased_courseMajorWeight;
@@ -62,20 +83,24 @@ public class coreEngineSubProccess {
 // HashMaps
     static HashMap<Integer, Double> map_coursesAverageRatings = new HashMap<Integer, Double>();
     static HashMap<Integer, Integer> map_KNNcoursesIdandScore = new HashMap<Integer, Integer>();
-    static HashMap<Integer,Integer> map_KNNCoursesId = new HashMap<Integer,Integer>();
+    static HashMap<Integer, Integer> map_KNNCoursesId = new HashMap<Integer, Integer>();
+    static HashMap<String, Double> map_COBScore = new HashMap<String, Double>();
+    static HashMap<String, Double> map_COBFinalScore = new HashMap<String, Double>();
+    static HashMap<String, Integer> map_KNNLIST = new HashMap<String, Integer>();
 
 //    
 //    ArrayLists
     static ArrayList list_similarProfiles = new ArrayList();
     static ArrayList list_coursesIds = new ArrayList();
-    
+    static ArrayList list_KNNFINAL_courseID = new ArrayList();
+    static ArrayList list_KNNFINAL_courseScore = new ArrayList();
+
     static ArrayList list_KNNcoursesScore = new ArrayList();
     static ArrayList list_KNNcoursesUsers = new ArrayList();
 //    
 //    String arrays
 
-//    
-    //    
+// 
     //    reading core weights from the database
     public static double readCoreWeights(String itemName, String destinationTable) {
         double itemWeight = 0.0;
@@ -273,11 +298,10 @@ public class coreEngineSubProccess {
 //      1.set the scale ( THE SAME KNN SCALE ) 
 //      ex. scaled the 25000 (max range ) to 5 scales ( 6250 per each ) ;
 
-            feesSimilarity = (maxFees-Integer.parseInt(courseFees))/((maxFees-(core_courseFeesRangeStart-1)));
+            feesSimilarity = (maxFees - Integer.parseInt(courseFees)) / ((maxFees - (core_courseFeesRangeStart - 1)));
             sim_courseFees = feesSimilarity * contentBased_courseFeeWeight;
 //        
-        }
-        else {
+        } else {
 //            in this case the expected fees will always less than the actual fees
 //            which will be discarded by the user.
             sim_courseFees = 0.0;
@@ -292,7 +316,7 @@ public class coreEngineSubProccess {
 
         try {
             mysql.openmySQLconnection();
-          coursesObject = mysql.executeSQLquery_stringRS2(env.dq_CB_getCoursesBySubClass(subclass), 0);
+            coursesObject = mysql.executeSQLquery_stringRS2(env.dq_CB_getCoursesBySubClass(subclass), 0);
             coursesObject.next();
 //            mysql.closemySQLconnection();
 
@@ -320,6 +344,165 @@ public class coreEngineSubProccess {
 //4. percentage calculator
 //5.append to hashmap.
 //6.users and course list generators.
+    //COB
+    public void runCOB(String uid) {
+        try {
+
+            map_COBScore.clear();
+//        userA props
+            mysql.openmySQLconnection();
+            Statement getUserAProfile = mysql.con.createStatement();
+            ResultSet userAProfile = getUserAProfile.executeQuery("SELECT * FROM DATSET.usr_contact_dat where usr_id = '" + uid + "'");
+            COB.UserA_props.clear();
+            while (userAProfile.next()) {
+                String A_mainClass = userAProfile.getString("usr_mainClass");
+                String A_Class = userAProfile.getString("usr_Class");
+                String A_subClass = userAProfile.getString("usr_subClass");
+                String A_Region = userAProfile.getString("usr_region");
+                String A_Skills = userAProfile.getString("usr_skills");
+                String A_interestArea = userAProfile.getString("usr_interestArea");
+
+                COB.UserA_props.add(A_mainClass);
+                COB.UserA_props.add(A_Class);
+                COB.UserA_props.add(A_subClass);
+                COB.UserA_props.add(A_Region);
+                COB.UserA_props.add(A_Skills);
+                COB.UserA_props.add(A_interestArea);
+
+            }
+            mysql.closemySQLconnection();
+
+            //        userA Recommendations
+            mysql.openmySQLconnection();
+            Statement getUserARecommendations = mysql.con.createStatement();
+            ResultSet userARecommendations = getUserARecommendations.executeQuery("SELECT * FROM DATSET.course_search_score where user_id = '" + uid + "'  ");
+            COB.UaCourseList.clear();
+            while (userARecommendations.next()) {
+
+//              
+                String courseId = userARecommendations.getString("course_id");
+                int courseScore = userARecommendations.getInt("course_score");
+//              
+                COB.UaCourseList.put(courseId, courseScore);
+
+            }
+            mysql.closemySQLconnection();
+
+            //        get all users.
+            mysql.openmySQLconnection();
+            Statement getUserBProfile = mysql.con.createStatement();
+            ResultSet UserBProfile = getUserBProfile.executeQuery("SELECT * FROM DATSET.usr_contact_dat where usr_id != '" + uid + "'");
+
+            while (UserBProfile.next()) {
+                COB.UserB_props.clear();
+                String B_mainClass = UserBProfile.getString("usr_mainClass");
+                String B_Class = UserBProfile.getString("usr_Class");
+                String B_subClass = UserBProfile.getString("usr_subClass");
+                String B_Region = UserBProfile.getString("usr_region");
+                String B_Skills = UserBProfile.getString("usr_skills");
+                String B_interestArea = UserBProfile.getString("usr_interestArea");
+
+                COB.UserB_props.add(B_mainClass);
+                COB.UserB_props.add(B_Class);
+                COB.UserB_props.add(B_subClass);
+                COB.UserB_props.add(B_Region);
+                COB.UserB_props.add(B_Skills);
+                COB.UserB_props.add(B_interestArea);
+                //    COB.Calculate_CollaborativeBased();
+
+                //while loop to calculate the recommendations history
+//                get list of Ua,Ub courses
+                //        user b Recommendations
+                Statement getUserBRecommendations = mysql.con.createStatement();
+                ResultSet userBRecommendations = getUserBRecommendations.executeQuery("SELECT * FROM DATSET.course_search_score where user_id = '" + UserBProfile.getString("usr_id") + "' and user_id !='" + uid + "'  ");
+                COB.UbCourseList.clear();
+                while (userBRecommendations.next()) {
+
+//              
+                    String courseId = userBRecommendations.getString("course_id");
+                    int courseScore = userBRecommendations.getInt("course_score");
+//              
+                    COB.UbCourseList.put(courseId, courseScore);
+                }
+                //                calculate COB score
+                COB.Calculate_CollaborativeBased();
+//                    add final score with user id to list
+                double scoreCOB = COB.Calculate_CollaborativeBased();
+                String UserId = UserBProfile.getString("usr_id");
+
+                map_COBScore.put(UserId, scoreCOB);
+
+            }
+
+            mysql.closemySQLconnection();
+//            get the knn list 
+
+            Map map_COBFinalScore = sortByValue(map_COBScore);
+            list_similarProfiles.clear();
+
+            map_COBFinalScore.forEach((u, s) -> {
+                list_similarProfiles.add(u);
+            });
+
+//            get courses by string_concatedUsers
+            string_concatedUsers = null;
+            usersGenerator();
+            mysql.openmySQLconnection();
+            Statement GetKnnList = mysql.con.createStatement();
+            ResultSet KnnList_Set = GetKnnList.executeQuery("SELECT * FROM DATSET.course_search_score where user_id in(" + string_concatedUsers + ")  ");
+            while (KnnList_Set.next()) {
+
+                list_KNNFINAL_courseID.add(KnnList_Set.getString("course_id"));
+                list_KNNFINAL_courseScore.add(KnnList_Set.getInt("course_score"));
+
+            }
+            mysql.closemySQLconnection();
+
+//
+//            End Hamdlelah.
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(coreEngineSubProccess.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(coreEngineSubProccess.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(coreEngineSubProccess.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(coreEngineSubProccess.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(coreEngineSubProccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+//        set Ua props
+//        COB.Calculate_CollaborativeBased(map_KNNCoursesId, map_KNNCoursesId);
+    }
+
+    public static void MapListsForCommonRate() {
+        CommonRate.KNN_ListOfID = list_KNNFINAL_courseID;
+        CommonRate.KNN_ListOfIDRates = list_KNNFINAL_courseScore;
+
+    }
+
+    public Map sortByValue(Map unsortedMap) {
+        Map sortedMap = new TreeMap(new ValueComparator(unsortedMap));
+        sortedMap.putAll(unsortedMap);
+        return sortedMap;
+    }
+
+    class ValueComparator implements Comparator {
+
+        Map map;
+
+        public ValueComparator(Map map) {
+            this.map = map;
+        }
+
+        public int compare(Object keyA, Object keyB) {
+            Comparable valueA = (Comparable) map.get(keyA);
+            Comparable valueB = (Comparable) map.get(keyB);
+            return valueB.compareTo(valueA);
+        }
+    }
+
     public ArrayList getSimilarProfiles(String userid, String searchKey) {
         try {
 //        this function takes the current user id to get the
@@ -354,10 +537,10 @@ public class coreEngineSubProccess {
     public HashMap getAverageRatingsForCourse() {
 
         for (Map.Entry m : map_KNNcoursesIdandScore.entrySet()) {
-            int courseScore= Integer.parseInt(m.getValue().toString());
-            int courseid= Integer.parseInt(m.getKey().toString());
+            int courseScore = Integer.parseInt(m.getValue().toString());
+            int courseid = Integer.parseInt(m.getKey().toString());
             double scale;
-           scale = getscaledPercentage(courseScore);
+            scale = getscaledPercentage(courseScore);
             map_coursesAverageRatings.put(courseid, scale);
         }
 
@@ -372,8 +555,26 @@ public class coreEngineSubProccess {
             if (i == ar.size() - 1) {
                 string_concatedIds += "'" + ar.get(i).toString() + "'";
             } else {
+                string_concatedIds += ",'" + ar.get(i).toString() + "'";
+            }
+        }
+
+        return string_concatedIds;
+    }
+    
+    
+       public String CourseidGenerator() {
+        ArrayList ar = list_coursesIds;
+//        called by CB engine in a while loop.
+        string_concatedIds = "'" + ar.get(0).toString() + "',";
+        for (int i = 1; i < ar.size(); i++) {
+            if (i >10 ) {
+                string_concatedIds += "'" + ar.get(i).toString() + "'";
+                break;
+            } else {
                 string_concatedIds += "'" + ar.get(i).toString() + "',";
             }
+            
         }
 
         return string_concatedIds;
@@ -382,18 +583,19 @@ public class coreEngineSubProccess {
     public String usersGenerator() {
         ArrayList ar = list_similarProfiles;
 
-        string_concatedUsers = "'" + ar.get(0).toString() + "',";
-        for (int i = 1; i < ar.size(); i++) {
+        string_concatedUsers = "'" + ar.get(0).toString() + "'";
+        for (int i = 1; i < ar.size() - 1; i++) {
             if (i == ar.size() - 1) {
-                string_concatedUsers += "'" + ar.get(i).toString() + "'";
+                string_concatedUsers += ",'" + ar.get(i).toString() + "'";
             } else {
-                string_concatedUsers += "'" + ar.get(i).toString() + "',";
+                string_concatedUsers += ",'" + ar.get(i).toString() + "'";
             }
+
         }
         return string_concatedUsers;
     }
 
-    public double getscaledPercentage( int rate) {
+    public double getscaledPercentage(int rate) {
         double valueOfscaledPercentage = 0.0;
         double valueOfScale = 0.0;
         valueOfScale = core_collaborativeBasedWeight / (core_KNNscaleEnd - core_KNNscaleStart);
@@ -425,7 +627,4 @@ public class coreEngineSubProccess {
         return score;
     }
 
-   
-    
-    
 }

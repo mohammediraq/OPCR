@@ -7,6 +7,7 @@ package RecommenderSystem;
 
 import BUSLOGIC.CollaborativeBased.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,34 +20,77 @@ public class CommonRatedCalculator {
 
     public static GlobalVariablesClass listOfVars = new GlobalVariablesClass();
 
-    static public double ARWc = 0.0;
-    static public int Omax = 0;
+    public double ARWc = 0.0;
+    public int Omax = 0;
 //    constant
-    static public int K = 2;
+    public int K = 2;
 //   Related to Ratings levels
 //    3:2:1 = 100%
 //    rate5:rate4:rate3 = 50:30:20
-    static public double IfRated3 = (listOfVars.KNNW / 3);
-    static public double IfRated4 = (listOfVars.KNNW / 3) * 2;
-    static public double IfRated5 = listOfVars.KNNW;
-    static public int Oc = 0;
+    public double IfRated3 = (listOfVars.KNNW / 3);
+    public double IfRated4 = (listOfVars.KNNW / 3) * 2;
+    public double IfRated5 = listOfVars.KNNW;
+    public int Oc = 0;
 
 //    
-    static ArrayList ContentBased_ListOfID = new ArrayList();
-    static ArrayList KNN_ListOfID = new ArrayList();
-    static ArrayList ContentBased_ListOfRates = new ArrayList();
-    static ArrayList KNN_ListOfIDRates = new ArrayList();
+    public static HashMap<Integer, Double> FinalList_ComRated = new HashMap<Integer, Double>();
+    public static ArrayList ContentBased_ListOfID = new ArrayList();
+    public static ArrayList KNN_ListOfID = new ArrayList();
+    public static ArrayList ContentBased_ListOfRates = new ArrayList();
+    public static ArrayList KNN_ListOfIDRates = new ArrayList();
 
-    public static void main(String[] args) {
-        TestingFunction();
-      getOc("C111");
-        
-        System.out.format("ARWc: %s",ARWc);
-//        checkCommonRated(ContentBased_ListOfID, KNN_ListOfID);
+//    public static void main(String[] args) {
+//        TestingFunction();
+////        double ARWC = getARWc("C003");
+//        getOmax(KNN_ListOfIDRates);
+//        // checkCommonRated(ContentBased_ListOfID, KNN_ListOfID);
+//
+//        System.out.format("ARWc: %s", Omax + "\n");
+////        checkCommonRated(ContentBased_ListOfID, KNN_ListOfID);
+//
+//    }
+    //final calculations for ARWc
+    public Map Cal_ARWc() {
+//        this function will be used after the content based courses list retrieved,
+//        and KNN got the list of top 5 users with 25 -avg- preferred courses,
+//        it will take the two lists to verify the common rated issue and returns
+//                a map of courses Ids, coureses score to be an input to the 
+//                        recommendation system.
+//
+//        ContentBased_ListOfID.clear();
+//        ContentBased_ListOfRates.clear();
+//        KNN_ListOfID.clear();
+//        KNN_ListOfIDRates.clear();
+//
+//        ContentBased_Map.forEach((ca, cv) -> {
+//            ContentBased_ListOfID.add(ca);
+//            ContentBased_ListOfRates.add(cv);
+//        });
 
+//        KNN_Map.forEach((ka, kv) -> {
+//            KNN_ListOfID.add(ka);
+//            KNN_ListOfIDRates.add(kv);
+//        });
+
+//       applying the eqution
+//        Get Omax
+        getOmax(KNN_ListOfIDRates);
+        for (int i = 0; i < ContentBased_ListOfID.size(); i++) {
+//            looping for each content based course item.
+            double _ARWc = getARWc(ContentBased_ListOfID.get(i).toString());
+            double _Oc = getOc(ContentBased_ListOfID.get(i).toString());
+//            Eq
+            double CRIscore = ((_ARWc * ((listOfVars.KNNW *100)- (Omax * 2)) / (listOfVars.KNNW*100)) + _Oc * 2) / 100;
+//            
+            FinalList_ComRated.put(Integer.parseInt(ContentBased_ListOfID.get(i).toString()), CRIscore);
+
+        }
+
+        //
+        return FinalList_ComRated;
     }
 
-    public static void checkCommonRated(ArrayList ContentBased_ListOfID, ArrayList KNN_List) {
+    public void checkCommonRated(ArrayList ContentBased_ListOfID, ArrayList KNN_List) {
         Map<String, Integer> finalCoursesMap = new HashMap();
 
         int Oc_Value = 0;
@@ -65,17 +109,25 @@ public class CommonRatedCalculator {
 
     }
 
-    public static double getSimById(int id) {
+    // TODO -- Shalaby.
+    public void getOmax(ArrayList KNNList) {
+//        
+        int _Omax = Integer.parseInt(Collections.max(KNNList).toString());
+
+        Omax = _Omax;
+    }
+
+    public double getSimById(int id) {
         double sim = ContentBased_ListOfRates.indexOf(id);
         return sim;
     }
 
-    public static int getRateById(int id) {
+    public int getRateById(int id) {
         int rate = KNN_ListOfIDRates.indexOf(id);
         return rate;
     }
 
-    public static int getOc(String courseId) {
+    public int getOc(String courseId) {
         int oc = 0;
         for (int i = 0; i < KNN_ListOfID.size(); i++) {
             String CurrentPos = KNN_ListOfID.get(i).toString();
@@ -86,12 +138,12 @@ public class CommonRatedCalculator {
 
         }
         Oc = oc;
-        System.out.format("OC %s", Oc);
+//        System.out.format("OC %s", Oc);
         return Oc;
 
     }
 
-    public static double getARWc(String courseId) {
+    public double getARWc(String courseId) {
         double _ARWc = 0.0;
         int ArrOfIndecies = 0;
         double resolvedRate = 0.0;
@@ -106,22 +158,17 @@ public class CommonRatedCalculator {
 
                 if (CourseRate == 5) {
                     resolvedRate += IfRated5;
-                    
-                ArrOfIndecies += 1;
-                }
 
-                else if (CourseRate == 4) {
+                    ArrOfIndecies += 1;
+                } else if (CourseRate == 4) {
                     resolvedRate += IfRated4;
-                    
-                ArrOfIndecies += 1;
-                }
 
-                else if (CourseRate == 3) {
+                    ArrOfIndecies += 1;
+                } else if (CourseRate == 3) {
                     resolvedRate += IfRated3;
-                    
-                ArrOfIndecies += 1;
-                }
 
+                    ArrOfIndecies += 1;
+                }
 
             }
 //            get the rate
@@ -131,10 +178,10 @@ public class CommonRatedCalculator {
         _ARWc = (resolvedRate / ArrOfIndecies);
 
         ARWc = _ARWc;
-        return ARWc * 100;
+        return _ARWc * 100;
     }
 
-    public static void TestingFunction() {
+    public void TestingFunction() {
         ContentBased_ListOfID.add("C1030");
         ContentBased_ListOfID.add("C001");
         ContentBased_ListOfID.add("C1031");

@@ -7,8 +7,11 @@ package BUSLOGIC;
 
 import static BUSLOGIC.coreEngineSubProccess.map_coursesAverageRatings;
 import static BUSLOGIC.coreEngineSubProccess.mysql;
+import RecommenderSystem.CommonRatedCalculator;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -24,20 +27,25 @@ public class coreEngine {
     static db_mysqlops mysql = new db_mysqlops();
     static FN_toJSON json = new FN_toJSON();
     static var_env env = new var_env();
-    static coreEngineSubProccess subprocess = new coreEngineSubProccess();
+    coreEngineSubProccess subprocess = new coreEngineSubProccess();
+    CommonRatedCalculator commonRateEngine = new CommonRatedCalculator();
 //    
     boolean KNN_similarityFound = false;
 //    
 //    HashMaps 
-    static HashMap<Integer, Double> map_contentBasedFinalScore = new HashMap<Integer, Double>();
-    static HashMap<Integer, Double> map_COBFinalScore;
+     HashMap<Integer, Double> map_contentBasedFinalScore = new HashMap<Integer, Double>();
+     HashMap<Integer, Double> map_COBFinalScore = new HashMap<Integer, Double>();
+     HashMap<Integer, Double> map_UniversityRankFinalScore = new HashMap<Integer, Double>();
+     HashMap<Integer, Double> map_UniversityNSSFinalScore = new HashMap<Integer, Double>();
 //
 
     //   University ranking vars
     static double UniversityRankSimilarity;
+    double UniversityRank_finalScore = 0.0;
+    double UniversityNSS_finalScore = 0.0;
 
 //
-        //   University NSS vars
+    //   University NSS vars
     static double UniversityNSS_Similarity;
 
 //
@@ -53,15 +61,15 @@ public class coreEngine {
 
 //    
 //    
-//    User's profile vars.
-    static String userMajor;
-    static String userSubclass;
-    static String userSearchkey;
-    static String userRegion;
-    static double minimumNSS;
-    static double maxFees;
-    static double minFees;
-//    
+    public void CollaborativeEngine() {
+        subprocess.runCOB("AHMSH0001");
+    }
+
+    public Map CommonRateEngine() {
+        subprocess.MapListsForCommonRate();
+        commonRateEngine.Cal_ARWc();
+        return commonRateEngine.Cal_ARWc();
+    }
 
     public void setCoreItemWeight() {
 
@@ -94,13 +102,13 @@ public class coreEngine {
     }
 
     public void setSearchProperties(String um, String usc, String usk, String ur, double mnss, double mnf, double mxf) {
-        userMajor = um;
-        userSubclass = usc;
-        userSearchkey = usk;
-        userRegion = ur;
-        minimumNSS = mnss;
-        minFees = mnf;
-        maxFees = mxf;
+        subprocess.userMajor = um;
+        subprocess.userSubclass = usc;
+        subprocess.userSearchkey = usk;
+        subprocess.userRegion = ur;
+        subprocess.minimumNSS = mnss;
+        subprocess.minFees = mnf;
+        subprocess.maxFees = mxf;
     }
 
 //    THE CORE FUNCTION.
@@ -108,12 +116,12 @@ public class coreEngine {
 //        preloaded functions.
         setContentBasedWeight();
         setCoreItemWeight();
-//              
 
+//              
 //        1. Get courses by a subclass.
-        subprocess.readCurrentCourses(userSubclass);
+        subprocess.readCurrentCourses(subprocess.userSubclass);
 //        2. Calculate foreach course similarity and fill the hashmap with 
-//           the course id and course score.
+//           the c  ourse id and course score.
 //        2.1: while loop with the courses object
 
         while (subprocess.coursesObject.next()) {
@@ -121,10 +129,10 @@ public class coreEngine {
                 //          !important: reset score counter.
 
 //        2.2: calculate course features similarity.
-                subprocess.cal_courseTitleSimilarity(userSearchkey, subprocess.coursesObject.getString("course_title"));
-                subprocess.cal_courseMajorSimilarity(userMajor, subprocess.coursesObject.getString("course_field"), subprocess.coursesObject.getString("course_qualification"));
-                subprocess.cal_locationSimilarity(subprocess.coursesObject.getString("course_location"), userRegion);
-                subprocess.cal_courseFees(minFees, maxFees, subprocess.coursesObject.getString("course_fees_uk").replace("£", "").replace(",", ""));
+                subprocess.cal_courseTitleSimilarity(subprocess.userSearchkey, subprocess.coursesObject.getString("course_title"));
+                subprocess.cal_courseMajorSimilarity(subprocess.userMajor, subprocess.coursesObject.getString("course_field"), subprocess.coursesObject.getString("course_qualification"));
+                subprocess.cal_locationSimilarity(subprocess.coursesObject.getString("course_location"), subprocess.userRegion);
+                subprocess.cal_courseFees(subprocess.minFees, subprocess.maxFees, subprocess.coursesObject.getString("course_fees_uk").replace("£", "").replace(",", ""));
 //        2.3   Hashmapping the output.
                 addContentBasedScore(subprocess.coursesObject.getInt("id"), subprocess.contentBasedScore);
 
@@ -138,6 +146,12 @@ public class coreEngine {
 
         }
         mysql.closemySQLconnection();
+
+        map_contentBasedFinalScore.forEach((cn, cv) -> {
+            commonRateEngine.ContentBased_ListOfID.add(cn);
+            commonRateEngine.ContentBased_ListOfRates.add(cv);
+        });
+
         return map_contentBasedFinalScore;
     }
 
@@ -209,11 +223,56 @@ public class coreEngine {
 //        testingColBased.appendRandomScores(course_id);
 //        System.out.print("ID: " + course_id + " - " + course_score + "\n");
         subprocess.contentBasedScore = 0.0;
-//
-
-//       
     }
     // calculate the university rank similarity
+
+    public Map UniversityData(int courseID) throws SQLException {
+
+        try {
+            UniversityNSS_finalScore = 0.0;
+            UniversityRank_finalScore = 0.0;
+            mysql.openmySQLconnection();
+            Statement getAllUniversityData = mysql.con.createStatement();
+            Statement getUniName = mysql.con.createStatement();
+
+            ResultSet UniNameObject = getUniName.executeQuery("SELECT * FROM DATSET.courses_postgrad where id ='" + courseID + "' limit 1");
+            while (UniNameObject.next()) {
+                String universityName = UniNameObject.getString("uni_name");
+
+                ResultSet UniversityObject = getAllUniversityData.executeQuery("SELECT * FROM DATSET.uni_nss_scoring where uni_name = '" + universityName + "'");
+                while (UniversityObject.next()) {
+                    Double rankscore = cal_UniversityRank(UniversityObject.getInt("recid"));
+                    Double nssScore = cal_UniversityNSS(UniversityObject.getDouble("nss_teaching"));
+
+                    if (rankscore == 0.0) {
+                        rankscore = 0.001;
+                    } else if (nssScore == 0.0) {
+                        nssScore = 0.001;
+                    }
+
+                    map_UniversityNSSFinalScore.put(courseID, nssScore);
+                    map_UniversityRankFinalScore.put(courseID, rankscore);
+                    UniversityNSS_finalScore = nssScore;
+                    UniversityRank_finalScore = rankscore;
+                    System.out.format("id: %s , map_UniversityNSSFinalScore: %s", courseID, UniversityNSS_finalScore);
+                    System.out.format("id: %s , map_UniversityRankFinalScore: %s", courseID, UniversityRank_finalScore);
+
+                }
+
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(coreEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(coreEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(coreEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(coreEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        mysql.closemySQLconnection();
+        return map_UniversityRankFinalScore;
+    }
 
     public double cal_UniversityRank(int universityRank) {
         int Rmax = 0;
@@ -250,32 +309,29 @@ public class coreEngine {
 
         return UniversityRankSimilarity * subprocess.core_universityRankWeight;
     }
-    
-    public double cal_UniversityNSS (double scoreOfNSS)
-    {
+
+    public double cal_UniversityNSS(double scoreOfNSS) {
         double minNSS = 0.0;
         double maxNSS = 0.0;
-        
-        if (scoreOfNSS >0)
-        {
+
+        if (scoreOfNSS > 0) {
             try {
-                
+
                 mysql.openmySQLconnection();
 //            get  min and max score.
-             ResultSet MinMaxObject = mysql.executeSQLquery_stringRS2(env.dq_NSS_getMinAndMaxScores(), 0);
-             
-             while (MinMaxObject.next())
-             {
-                 minNSS =   MinMaxObject.getDouble("min nss");
-                 maxNSS =  MinMaxObject.getDouble("max nss");
-                 
-             }
+                ResultSet MinMaxObject = mysql.executeSQLquery_stringRS2(env.dq_NSS_getMinAndMaxScores(), 0);
+
+                while (MinMaxObject.next()) {
+                    minNSS = MinMaxObject.getDouble("min nss");
+                    maxNSS = MinMaxObject.getDouble("max nss");
+
+                }
                 mysql.closemySQLconnection();
 //                implement the equation.
 
-          double sim = (scoreOfNSS-(minNSS-1))/(maxNSS-(minNSS-1));
+                double sim = (scoreOfNSS - (minNSS - 1)) / (maxNSS - (minNSS - 1));
                 UniversityNSS_Similarity = sim;
-                  
+
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(coreEngine.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {
@@ -287,9 +343,9 @@ public class coreEngine {
             } catch (Exception ex) {
                 Logger.getLogger(coreEngine.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         }
-        
+
         return UniversityNSS_Similarity * subprocess.core_universityNSSWeight;
     }
 }

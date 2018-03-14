@@ -7,7 +7,9 @@ package BUSLOGIC;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -40,8 +42,9 @@ public class API_getUserProfile extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
 //            this is to get all counties
             mysql.openmySQLconnection();
-            mysql.executeSQLquery(env.dq_usrProfile);
-            out.print(json.convertToJSON(mysql.rs));
+           Statement st = mysql.con.createStatement();
+           ResultSet rs = st.executeQuery(env.dq_usrProfile);
+            out.print(json.convertToJSON(rs));
             mysql.closemySQLconnection();
         }
     }

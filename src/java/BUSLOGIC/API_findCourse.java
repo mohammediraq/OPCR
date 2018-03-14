@@ -30,7 +30,7 @@ import org.json.JSONObject;
  *
  * @author AhmedShalaby
  */
-public class API_courseSearch extends HttpServlet {
+public class API_findCourse extends HttpServlet {
 
     coreEngine core = new coreEngine();
     CommonRatedCalculator commonRateEngine = new CommonRatedCalculator();
@@ -42,11 +42,11 @@ public class API_courseSearch extends HttpServlet {
     var_env env = new var_env();
     testingColBased test = new testingColBased();
 
-    static appendLog log = new appendLog();
+
     static String stid;
     int hop = 0;
-     HashMap<Integer, Double> CourseList_FinalScore = new HashMap<Integer, Double>();
-     Map<Integer, Double> CourseList_FinalScore_Ordered = new HashMap<Integer, Double>();
+    static HashMap<Integer, Double> CourseList_FinalScore = new HashMap<Integer, Double>();
+    static Map<Integer, Double> CourseList_FinalScore_Ordered = new HashMap<Integer, Double>();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -81,7 +81,7 @@ public class API_courseSearch extends HttpServlet {
 
 //                core.map_COBFinalScore.clear();
 //                core.map_contentBasedFinalScore.clear();
-                log.log_userSearchHistory(userIdentification, searchKey, user_subclass);
+            //    log.log_userSearchHistory(userIdentification, searchKey, user_subclass);
 //              get gvars of all weights
 //              identifying gvars for initial vars calls.
 
@@ -154,33 +154,36 @@ public class API_courseSearch extends HttpServlet {
                 }
 
 // ops2 : 
-            } else if (methodName.equals("scoreCourse")) {
-//    DEBUG:    /API_courseSearch?usrid=AHMSH0001&methodName=scoreCourse&courseid=1&courseScore=3
-                userIdentification = request.getParameter("usrid").trim();
-                courseid = Integer.parseInt(request.getParameter("courseid"));
-                courseScore = Integer.parseInt(request.getParameter("courseScore"));
-                String cr, cc, csc, courseCriteria;
-//                get course criteria 
-                mysql.openmySQLconnection();
-                ResultSet rs = mysql.executeSQLquery_stringRS2("select course_rootClass,course_class,course_Subclass"
-                        + " from datset.courses_postgrad where id=" + courseid + "", 0);
-
-                while (rs.next()) {
-                    cr = rs.getString("course_rootClass");
-                    cc = rs.getString("course_class");
-                    csc = rs.getString("course_Subclass");
-                    courseCriteria = log.concat_generateCourseCriteria(courseid, cr, cc, csc);
-                    mysql.closemySQLconnection();
-//                    done
-//                  log values in course search score 
-                    mysql.openmySQLconnection();
-                    mysql.executeSQL(env.dq_insertCourseSearchScore(courseid, courseScore, courseCriteria, userIdentification));
-                    mysql.closemySQLconnection();
-
-                    out.print("courserid: " + courseid + "</br>" + "courseScore: " + courseScore + "</br>");
-                }
-
-            }
+            } 
+//            
+//            
+//            else if (methodName.equals("scoreCourse")) {
+////    DEBUG:    /API_courseSearch?usrid=AHMSH0001&methodName=scoreCourse&courseid=1&courseScore=3
+//                userIdentification = request.getParameter("usrid").trim();
+//                courseid = Integer.parseInt(request.getParameter("courseid"));
+//                courseScore = Integer.parseInt(request.getParameter("courseScore"));
+//                String cr, cc, csc, courseCriteria;
+////                get course criteria 
+//                mysql.openmySQLconnection();
+//                ResultSet rs = mysql.executeSQLquery_stringRS2("select course_rootClass,course_class,course_Subclass"
+//                        + " from datset.courses_postgrad where id=" + courseid + "", 0);
+//
+//                while (rs.next()) {
+//                    cr = rs.getString("course_rootClass");
+//                    cc = rs.getString("course_class");
+//                    csc = rs.getString("course_Subclass");
+//                //    courseCriteria = log.concat_generateCourseCriteria(courseid, cr, cc, csc);
+//                    mysql.closemySQLconnection();
+////                    done
+////                  log values in course search score 
+//                    mysql.openmySQLconnection();
+//                    mysql.executeSQL(env.dq_insertCourseSearchScore(courseid, courseScore, courseCriteria, userIdentification));
+//                    mysql.closemySQLconnection();
+//
+//                    out.print("courserid: " + courseid + "</br>" + "courseScore: " + courseScore + "</br>");
+//                }
+//
+//            }
 
         }
     }
