@@ -25,17 +25,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
-
 /**
  *
  * @author AhmedShalaby
  */
 public class API_courseSearch extends HttpServlet {
 
-    coreEngine core = new coreEngine();
-    CommonRatedCalculator commonRateEngine = new CommonRatedCalculator();
-    coreEngineSubProccess subprocess = new coreEngineSubProccess();
-    sortedMap sortmap = new sortedMap();
+    static coreEngine core = new coreEngine();
+    static CommonRatedCalculator commonRateEngine = new CommonRatedCalculator();
+    static coreEngineSubProccess subprocess = new coreEngineSubProccess();
+    static sortedMap sortmap = new sortedMap();
 //    contentBasedEngine core = new contentBasedEngine();
     db_mysqlops mysql = new db_mysqlops();
     FN_toJSON json = new FN_toJSON();
@@ -45,12 +44,13 @@ public class API_courseSearch extends HttpServlet {
     static appendLog log = new appendLog();
     static String stid;
     int hop = 0;
-     HashMap<Integer, Double> CourseList_FinalScore = new HashMap<Integer, Double>();
-     Map<Integer, Double> CourseList_FinalScore_Ordered = new HashMap<Integer, Double>();
+    HashMap<Integer, Double> CourseList_FinalScore = new HashMap<Integer, Double>();
+    Map<Integer, Double> CourseList_FinalScore_Ordered = new HashMap<Integer, Double>();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * methods. //
+     * /API_courseSearch?methodName=searchCourse&key=Computer%20Graph&usrid=AHMSH0001&sc=Computer%20Graphics&ur=Jersey&um=Computer%20Programming&nss=55&coursemin=8000&coursemx=10000
      *
      * @param request servlet request
      * @param response servlet response
@@ -81,13 +81,18 @@ public class API_courseSearch extends HttpServlet {
 
 //                core.map_COBFinalScore.clear();
 //                core.map_contentBasedFinalScore.clear();
-                log.log_userSearchHistory(userIdentification, searchKey, user_subclass);
+                // log.log_userSearchHistory(userIdentification, searchKey, user_subclass);
 //              get gvars of all weights
 //              identifying gvars for initial vars calls.
-
+                core.map_contentBasedFinalScore.clear();
+                core.map_COBFinalScore.clear();
+                commonRateEngine.FinalList_ComRated.clear();
+               
+                
+                
                 core.setSearchProperties(user_major, user_subclass, searchKey, user_region, minNSS, courseMinFees, courseMaxFees);
                 core.CB_calculateCourseSimilarities();
-                core.CollaborativeEngine();
+                core.CollaborativeEngine(userIdentification);
                 core.CommonRateEngine();
                 //CourseList_FinalScore
 
@@ -133,20 +138,19 @@ public class API_courseSearch extends HttpServlet {
 
                 });
                 mysql.closemySQLconnection();
-                String ids = subprocess.CourseidGenerator();
+                String ids = "";
+                      ids=  subprocess.CourseidGenerator();
                 System.out.format("IDs of final recommendation: %s", ids);
                 try {
                     mysql.openmySQLconnection();
                     Statement getTop5CoursesData = mysql.con.createStatement();
-                    
+
                     ResultSet top5Courses_Object = getTop5CoursesData.executeQuery("SELECT * FROM DATSET.courses_postgrad where id in (" + ids + ")");
                     while (top5Courses_Object.next()) {
                         out.print(json.convertToJSON(top5Courses_Object));
                     }
                     mysql.closemySQLconnection();
 
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(API_courseSearch.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InstantiationException ex) {
                     Logger.getLogger(API_courseSearch.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IllegalAccessException ex) {

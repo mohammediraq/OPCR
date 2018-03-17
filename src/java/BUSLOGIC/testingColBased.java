@@ -28,7 +28,7 @@ public class testingColBased {
            for (int i = 0; i < 6; i++) {
        mysql.openmySQLconnection();
        Statement st = mysql.con.createStatement();
-       ResultSet o = st.executeQuery("SELECT * FROM DATSET.courses_postgrad limit 1000");
+       ResultSet o = st.executeQuery("select * from datset.courses_postgrad where course_subclass ='Computer Programming' ");
        while (o.next())
        {
            appendRandomScores(o.getInt("id"));

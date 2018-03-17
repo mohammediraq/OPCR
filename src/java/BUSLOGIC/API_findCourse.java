@@ -87,7 +87,7 @@ public class API_findCourse extends HttpServlet {
 
                 core.setSearchProperties(user_major, user_subclass, searchKey, user_region, minNSS, courseMinFees, courseMaxFees);
                 core.CB_calculateCourseSimilarities();
-                core.CollaborativeEngine();
+                core.CollaborativeEngine(userIdentification);
                 core.CommonRateEngine();
                 //CourseList_FinalScore
 

@@ -74,6 +74,7 @@ public class CommonRatedCalculator {
 
 //       applying the eqution
 //        Get Omax
+       
         getOmax(KNN_ListOfIDRates);
         for (int i = 0; i < ContentBased_ListOfID.size(); i++) {
 //            looping for each content based course item.
@@ -109,7 +110,7 @@ public class CommonRatedCalculator {
 
     }
 
-    // TODO -- Shalaby.
+    // TODO -- Shalaby. > done
     public void getOmax(ArrayList KNNList) {
 //        
         int _Omax = Integer.parseInt(Collections.max(KNNList).toString());
@@ -173,7 +174,12 @@ public class CommonRatedCalculator {
             }
 //            get the rate
         }
-
+        
+        if (ArrOfIndecies == 0)
+        {
+            // this will modify NAN error.
+            ArrOfIndecies =1 ;
+        }
 //        calculate the average;
         _ARWc = (resolvedRate / ArrOfIndecies);
 

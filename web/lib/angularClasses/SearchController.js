@@ -16,8 +16,7 @@ angulerRouterApp.controller('Search_Controller', function ($scope, $http) {
 //    get user props 
 
         $http.get('API_getUserByID?userId=' + ng0userIdentification + '').then(function (userObject) {
-            if (userObject.status == 200 || userObject.status == 201)
-            {
+          
                 //search for courses with user props;
 //userMajor = usr_education_background
 //userSubclass 	 =usr_subclass
@@ -31,34 +30,23 @@ angulerRouterApp.controller('Search_Controller', function ($scope, $http) {
 ///API_courseSearch?methodName=searchCourse&key=Computer%20Graph&usrid=AHMSH0001&sc=Computer%20Graphics&ur=Jersey&um=Computer%20Programming&nss=55&coursemin=8000&coursemx=10000
                 $http.get('API_courseSearch?methodName=searchCourse&key=' + ng0searchKey.replace(" ", "%20") + '&usrid=' + userObject.data[0].usr_id + '&sc=' + userObject.data[0].usr_subclass.replace(" ", "%20") + '&ur=' + userObject.data[0].usr_region.replace(' ', '%20') + '&um=' + userObject.data[0].usr_education_background + '&nss=' + ng0minNSS + '&coursemin=8000&coursemx=10000').then(function (courseResponse) {
 //            courseResponse
-                    if (userObject.status == 200 || userObject.status == 201)
-                    {
+                  
+                    
                         $scope.showProgress = false;
                         $scope.ng0show_resultstable = true;
-
+                        $scope.recommendedCourses = courseResponse.data;
                         console.log(courseResponse.data);
 
-                    } else
-                    {
+              
+                    
                         console.log("there;s a problem while calling get courses by id api.." + "==> " + courseResponse.status);
-                    }
-                })
-
-
-
-
-            } else
-            {
-                console.log("there;s a problem while calling get user by id api.." + "==> " + userObject.status);
-            }
+                    
+                });
 
         });
 
+
     };
-
-
-
-
 
 // onload function.
     $scope.onload = function () {

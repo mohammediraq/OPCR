@@ -45,7 +45,7 @@ public class CollaborativeBasedClass {
         double recommendationScore = RecommendationHistory.Calculate_RecommendationHistoryScore(UaCourseList, UbCourseList);
 
         FinalCOB_Score = ontologyScore + recommendationScore;
-        System.out.format("\n----------\n Collaborative Score: %s", COB_FinalScore + "\n");
+        System.out.format("\n----------\n Collaborative Score: %s", FinalCOB_Score + "\n");
         return FinalCOB_Score;
 
     }

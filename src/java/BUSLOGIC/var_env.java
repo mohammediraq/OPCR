@@ -417,7 +417,7 @@ public class var_env {
 
     public String dq_CB_getCoursesBySubClass(String subclass) {
         String q = "select * from datset.courses_postgrad where uni_nss is not null and course_fees_uk !='' "
-                + " and course_subclass = '" + subclass + "' limit 1000";
+                + " and course_subclass like ('%" + subclass + "%') limit 1000";
         return q;
     }
     

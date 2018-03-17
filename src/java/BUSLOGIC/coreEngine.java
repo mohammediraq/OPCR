@@ -5,8 +5,6 @@
  */
 package BUSLOGIC;
 
-import static BUSLOGIC.coreEngineSubProccess.map_coursesAverageRatings;
-import static BUSLOGIC.coreEngineSubProccess.mysql;
 import RecommenderSystem.CommonRatedCalculator;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,10 +31,10 @@ public class coreEngine {
     boolean KNN_similarityFound = false;
 //    
 //    HashMaps 
-     HashMap<Integer, Double> map_contentBasedFinalScore = new HashMap<Integer, Double>();
-     HashMap<Integer, Double> map_COBFinalScore = new HashMap<Integer, Double>();
-     HashMap<Integer, Double> map_UniversityRankFinalScore = new HashMap<Integer, Double>();
-     HashMap<Integer, Double> map_UniversityNSSFinalScore = new HashMap<Integer, Double>();
+    HashMap<Integer, Double> map_contentBasedFinalScore = new HashMap<Integer, Double>();
+    HashMap<Integer, Double> map_COBFinalScore = new HashMap<Integer, Double>();
+    HashMap<Integer, Double> map_UniversityRankFinalScore = new HashMap<Integer, Double>();
+    HashMap<Integer, Double> map_UniversityNSSFinalScore = new HashMap<Integer, Double>();
 //
 
     //   University ranking vars
@@ -61,8 +59,8 @@ public class coreEngine {
 
 //    
 //    
-    public void CollaborativeEngine() {
-        subprocess.runCOB("AHMSH0001");
+    public void CollaborativeEngine(String id) {
+        subprocess.runCOB(id);
     }
 
     public Map CommonRateEngine() {
@@ -116,6 +114,7 @@ public class coreEngine {
 //        preloaded functions.
         setContentBasedWeight();
         setCoreItemWeight();
+        map_contentBasedFinalScore.clear();
 
 //              
 //        1. Get courses by a subclass.
@@ -127,14 +126,14 @@ public class coreEngine {
         while (subprocess.coursesObject.next()) {
             try {
                 //          !important: reset score counter.
-
+                double cbscore = 0.0;
 //        2.2: calculate course features similarity.
-                subprocess.cal_courseTitleSimilarity(subprocess.userSearchkey, subprocess.coursesObject.getString("course_title"));
-                subprocess.cal_courseMajorSimilarity(subprocess.userMajor, subprocess.coursesObject.getString("course_field"), subprocess.coursesObject.getString("course_qualification"));
-                subprocess.cal_locationSimilarity(subprocess.coursesObject.getString("course_location"), subprocess.userRegion);
-                subprocess.cal_courseFees(subprocess.minFees, subprocess.maxFees, subprocess.coursesObject.getString("course_fees_uk").replace("£", "").replace(",", ""));
+                cbscore += subprocess.cal_courseTitleSimilarity(subprocess.userSearchkey, subprocess.coursesObject.getString("course_title"));
+                cbscore += subprocess.cal_courseMajorSimilarity(subprocess.userMajor, subprocess.coursesObject.getString("course_field"), subprocess.coursesObject.getString("course_qualification"));
+                cbscore += subprocess.cal_locationSimilarity(subprocess.coursesObject.getString("course_location"), subprocess.userRegion);
+                cbscore += subprocess.cal_courseFees(subprocess.minFees, subprocess.maxFees, subprocess.coursesObject.getString("course_fees_uk").replace("£", "").replace(",", ""));
 //        2.3   Hashmapping the output.
-                addContentBasedScore(subprocess.coursesObject.getInt("id"), subprocess.contentBasedScore);
+                addContentBasedScore(subprocess.coursesObject.getInt("id"), cbscore);
 
             } catch (InstantiationException ex) {
                 Logger.getLogger(coreEngine.class.getName()).log(Level.SEVERE, null, ex);
@@ -146,7 +145,8 @@ public class coreEngine {
 
         }
         mysql.closemySQLconnection();
-
+        commonRateEngine.ContentBased_ListOfID.clear();
+        commonRateEngine.ContentBased_ListOfRates.clear();
         map_contentBasedFinalScore.forEach((cn, cv) -> {
             commonRateEngine.ContentBased_ListOfID.add(cn);
             commonRateEngine.ContentBased_ListOfRates.add(cv);

@@ -33,11 +33,11 @@ public class coreEngineSubProccess {
     static db_mysqlops mysql = new db_mysqlops();
     static FN_toJSON json = new FN_toJSON();
     static var_env env = new var_env();
-    static BUSLOGIC.CollaborativeBased.CollaborativeBasedClass COB = new CollaborativeBasedClass();
-    static RecommenderSystem.CommonRatedCalculator CommonRate = new RecommenderSystem.CommonRatedCalculator();
+    BUSLOGIC.CollaborativeBased.CollaborativeBasedClass COB = new CollaborativeBasedClass();
+    RecommenderSystem.CommonRatedCalculator CommonRate = new RecommenderSystem.CommonRatedCalculator();
 
-    static ResultSet rs;
-    static ResultSet coursesObject;
+    ResultSet rs;
+    ResultSet coursesObject;
 
 //   Content based vars
     static double contentBasedScore;
@@ -61,13 +61,13 @@ public class coreEngineSubProccess {
 //  
 //    
     //    User's profile vars.
-    static String userMajor;
-    static String userSubclass;
-    static String userSearchkey;
-    static String userRegion;
-    static double minimumNSS;
-    static double maxFees;
-    static double minFees;
+    String userMajor;
+    String userSubclass;
+    String userSearchkey;
+    String userRegion;
+    double minimumNSS;
+    double maxFees;
+    double minFees;
 //    
 
     //   Content-based item weights
@@ -77,32 +77,32 @@ public class coreEngineSubProccess {
     static double contentBased_courseLocationWeight;
 //
 //    Strings 
-    static String string_concatedUsers;
-    static String string_concatedIds;
+    String string_concatedUsers;
+    String string_concatedIds;
 //    
 // HashMaps
-    static HashMap<Integer, Double> map_coursesAverageRatings = new HashMap<Integer, Double>();
-    static HashMap<Integer, Integer> map_KNNcoursesIdandScore = new HashMap<Integer, Integer>();
-    static HashMap<Integer, Integer> map_KNNCoursesId = new HashMap<Integer, Integer>();
-    static HashMap<String, Double> map_COBScore = new HashMap<String, Double>();
-    static HashMap<String, Double> map_COBFinalScore = new HashMap<String, Double>();
-    static HashMap<String, Integer> map_KNNLIST = new HashMap<String, Integer>();
+     HashMap<Integer, Double> map_coursesAverageRatings = new HashMap<Integer, Double>();
+     HashMap<Integer, Integer> map_KNNcoursesIdandScore = new HashMap<Integer, Integer>();
+     HashMap<Integer, Integer> map_KNNCoursesId = new HashMap<Integer, Integer>();
+     HashMap<String, Double> map_COBScore = new HashMap<String, Double>();
+     HashMap<String, Double> map_COBFinalScore = new HashMap<String, Double>();
+     HashMap<String, Integer> map_KNNLIST = new HashMap<String, Integer>();
 
 //    
 //    ArrayLists
-    static ArrayList list_similarProfiles = new ArrayList();
-    static ArrayList list_coursesIds = new ArrayList();
-    static ArrayList list_KNNFINAL_courseID = new ArrayList();
-    static ArrayList list_KNNFINAL_courseScore = new ArrayList();
+    ArrayList list_similarProfiles = new ArrayList();
+    ArrayList list_coursesIds = new ArrayList();
+    ArrayList list_KNNFINAL_courseID = new ArrayList();
+    ArrayList list_KNNFINAL_courseScore = new ArrayList();
 
-    static ArrayList list_KNNcoursesScore = new ArrayList();
-    static ArrayList list_KNNcoursesUsers = new ArrayList();
+    ArrayList list_KNNcoursesScore = new ArrayList();
+    ArrayList list_KNNcoursesUsers = new ArrayList();
 //    
 //    String arrays
 
 // 
     //    reading core weights from the database
-    public static double readCoreWeights(String itemName, String destinationTable) {
+    public double readCoreWeights(String itemName, String destinationTable) {
         double itemWeight = 0.0;
 
         try {
@@ -139,11 +139,10 @@ public class coreEngineSubProccess {
         return contentBasedScore;
     }
 
-    public void addScore_contentBased(double s) {
-        contentBasedScore += s;
-    }
+    public static void addScore_contentBased(double s) {
+        contentBasedScore += s;    }
 
-    public double cal_courseTitleSimilarity(String searchKey, String courseTitle) {
+    public static double cal_courseTitleSimilarity(String searchKey, String courseTitle) {
 
         sim_courseTitle = 0.0;
         String wc[] = courseTitle.split(" ");
@@ -183,11 +182,11 @@ public class coreEngineSubProccess {
             trueMatches = 0.0;
         }
 //        returning the similarity in a double formatted value
-        addScore_contentBased(sim_courseTitle * contentBased_courseTitleWeight);
-        return sim_courseTitle;
+        
+        return sim_courseTitle * contentBased_courseTitleWeight;
     }
 
-    public double cal_courseMajorSimilarity(String userMajor, String courseField, String courseQual) {
+    public static double cal_courseMajorSimilarity(String userMajor, String courseField, String courseQual) {
 //        this function will point to 2 database columns 
 //        1.Course_field: as it has the main course major which been entered by the admin
 //        and will calculate the matching percentage with conf_classes;
@@ -209,7 +208,7 @@ public class coreEngineSubProccess {
 //        1.Similarity for course field.
 //          userMajorWords and courseFieldWords;
         if (courseField.trim().equalsIgnoreCase(userMajor.trim())) {
-            identicalSimilarity += 50.0;
+            identicalSimilarity +=.5;
         } else {
 
             for (String userMajorWord : userMajorWords) {
@@ -233,7 +232,7 @@ public class coreEngineSubProccess {
         }
 
         if (courseQual.trim().equalsIgnoreCase(userMajor.trim())) {
-            identicalSimilarity += 50.0;
+            identicalSimilarity += .5;
         } else {
 
             for (String userMajorWord : userMajorWords) {
@@ -260,11 +259,11 @@ public class coreEngineSubProccess {
             sim_courseMajor = 100;
         }
 
-        addScore_contentBased(sim_courseMajor * contentBased_courseMajorWeight);
-        return Math.abs(sim_courseMajor);
+        
+        return Math.abs(sim_courseMajor * contentBased_courseMajorWeight);
     }
 
-    public double cal_locationSimilarity(String courseLocation, String userLocation) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, Exception {
+    public static double cal_locationSimilarity(String courseLocation, String userLocation) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, Exception {
         sim_courseLocation = 0.0;
         if (userLocation.isEmpty() == false && courseLocation.isEmpty() == false) {
 
@@ -279,18 +278,18 @@ public class coreEngineSubProccess {
                 String uniRegion = rs.getString("Region");
 
                 if (userLocation.equals(uniRegion)) {
-                    sim_courseLocation = 0.1 * contentBased_courseLocationWeight;
+                    sim_courseLocation = 0.1 ;
                 } else {
                     sim_courseLocation = 0.0;
                 }
             }
         }
         mysql.closemySQLconnection();
-        addScore_contentBased(sim_courseLocation);
-        return sim_courseLocation;
+       
+        return sim_courseLocation *  contentBased_courseLocationWeight;
     }
 
-    public double cal_courseFees(double minFees, double maxFees, String courseFees) {
+    public static double cal_courseFees(double minFees, double maxFees, String courseFees) {
         double feesSimilarity = 0.0;
         double courseFeesValue = Double.parseDouble(courseFees);
 //      **check   amount validitaion -null -undefined 
@@ -307,7 +306,7 @@ public class coreEngineSubProccess {
             sim_courseFees = 0.0;
         }
 
-        addScore_contentBased(sim_courseFees);
+
         return sim_courseFees;
     }
 
@@ -378,7 +377,7 @@ public class coreEngineSubProccess {
             ResultSet userARecommendations = getUserARecommendations.executeQuery("SELECT * FROM DATSET.course_search_score where user_id = '" + uid + "'  ");
             COB.UaCourseList.clear();
             while (userARecommendations.next()) {
-
+                
 //              
                 String courseId = userARecommendations.getString("course_id");
                 int courseScore = userARecommendations.getInt("course_score");
@@ -388,6 +387,11 @@ public class coreEngineSubProccess {
             }
             mysql.closemySQLconnection();
 
+            if (COB.UaCourseList.isEmpty())
+            {
+                COB.UaCourseList.put("1",1);
+            }
+            
             //        get all users.
             mysql.openmySQLconnection();
             Statement getUserBProfile = mysql.con.createStatement();
@@ -424,13 +428,17 @@ public class coreEngineSubProccess {
 //              
                     COB.UbCourseList.put(courseId, courseScore);
                 }
-                //                calculate COB score
-                COB.Calculate_CollaborativeBased();
+                
+                 if (COB.UbCourseList.isEmpty())
+            {
+                COB.UbCourseList.put("1",1);
+            }
+
 //                    add final score with user id to list
                 double scoreCOB = COB.Calculate_CollaborativeBased();
                 String UserId = UserBProfile.getString("usr_id");
 
-                map_COBScore.put(UserId, scoreCOB);
+                map_COBScore.put(UserId, scoreCOB * core_collaborativeBasedWeight);
 
             }
 
@@ -443,10 +451,13 @@ public class coreEngineSubProccess {
             map_COBFinalScore.forEach((u, s) -> {
                 list_similarProfiles.add(u);
             });
-
+// list of similar profiles : sort in order and get top 5 
 //            get courses by string_concatedUsers
+            list_KNNFINAL_courseID.clear();
+            list_KNNFINAL_courseScore.clear();
+
             string_concatedUsers = null;
-            usersGenerator();
+            string_concatedUsers = Top5usersGenerator();
             mysql.openmySQLconnection();
             Statement GetKnnList = mysql.con.createStatement();
             ResultSet KnnList_Set = GetKnnList.executeQuery("SELECT * FROM DATSET.course_search_score where user_id in(" + string_concatedUsers + ")  ");
@@ -476,7 +487,9 @@ public class coreEngineSubProccess {
 //        COB.Calculate_CollaborativeBased(map_KNNCoursesId, map_KNNCoursesId);
     }
 
-    public static void MapListsForCommonRate() {
+    public void MapListsForCommonRate() {
+   
+         
         CommonRate.KNN_ListOfID = list_KNNFINAL_courseID;
         CommonRate.KNN_ListOfIDRates = list_KNNFINAL_courseScore;
 
@@ -561,27 +574,45 @@ public class coreEngineSubProccess {
 
         return string_concatedIds;
     }
-    
-    
-       public String CourseidGenerator() {
-        ArrayList ar = list_coursesIds;
+
+    public String CourseidGenerator() {
+        ArrayList ar = null;
+        ar = list_coursesIds;
 //        called by CB engine in a while loop.
-        string_concatedIds = "'" + ar.get(0).toString() + "',";
+        string_concatedIds = "'" + ar.get(0).toString() + "'";
         for (int i = 1; i < ar.size(); i++) {
-            if (i >10 ) {
-                string_concatedIds += "'" + ar.get(i).toString() + "'";
+            if (i > 10) {
+                string_concatedIds += ",'" + ar.get(i).toString() + "'";
                 break;
             } else {
-                string_concatedIds += "'" + ar.get(i).toString() + "',";
+                string_concatedIds += ",'" + ar.get(i).toString() + "'";
             }
-            
+
         }
 
         return string_concatedIds;
     }
 
+    public String Top5usersGenerator() {
+        ArrayList ar = null;
+        ar = list_similarProfiles;
+
+        string_concatedUsers = "'" + ar.get(0).toString() + "'";
+        for (int i = 1; i < ar.size() - 1; i++) {
+            if (i > 6) {
+                string_concatedUsers += "'" + ar.get(i).toString() + "'";
+                break;
+            } else {
+                string_concatedUsers += ",'" + ar.get(i).toString() + "'";
+            }
+
+        }
+        return string_concatedUsers;
+    }
+
     public String usersGenerator() {
-        ArrayList ar = list_similarProfiles;
+        ArrayList ar = null;
+        ar = list_similarProfiles;
 
         string_concatedUsers = "'" + ar.get(0).toString() + "'";
         for (int i = 1; i < ar.size() - 1; i++) {

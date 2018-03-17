@@ -27,9 +27,9 @@ public class RecommendationHistoryClass {
     static db_mysqlops mysql = new db_mysqlops();
     static FN_toJSON json = new FN_toJSON();
     static var_env env = new var_env();
-     double score = 0.0;
-     int Numerator = 0;
-     double Denominator = 0.0;
+    double score = 0.0;
+    int Numerator = 0;
+    double Denominator = 0.0;
 
     public static HashMap<Integer, Double> RecommendationHistory_Map = new HashMap<Integer, Double>();
 //    
@@ -38,27 +38,23 @@ public class RecommendationHistoryClass {
 //     => listof Ua 5 courses , listOf Ub 5 coureses.
 //      <= Recommendation similarity score..
 
-  
-
-    public  double Calculate_RecommendationHistoryScore(Map UaCourseList, Map UbCourseList) {
-        CompareCourse(UaCourseList, UbCourseList);
-        score =0.0;
+    public double Calculate_RecommendationHistoryScore(Map UaCourseList, Map UbCourseList) {
+            CompareCourse(UaCourseList, UbCourseList);
+        score = 0.0;
         score = (Numerator / Denominator) * listOfVars.RecommendationHistory_Similarity;
-        
-        System.out.format("\n---------\n Final Score:%s", score+"\n");
+
+        System.out.format("\n---------\n Final Score:%s", score + "\n");
         return score;
     }
 
-    public  void  CompareCourse(Map UaCourseList, Map UbCourseList) {
-
+    public void CompareCourse(Map UaCourseList, Map UbCourseList) {
+       
         GetNumerator(UaCourseList, UbCourseList);
         GetDenominator(UaCourseList, UbCourseList);
 
-        
-
     }
 
-    public  void GetDenominator(Map UaCourseList, Map UbCourseList) {
+    public void GetDenominator(Map UaCourseList, Map UbCourseList) {
         ArrayList ListA = new ArrayList();
         ArrayList ListB = new ArrayList();
         double DenominatorA = 0.0;
@@ -91,12 +87,11 @@ public class RecommendationHistoryClass {
         ListB_sqrt = Math.sqrt(DenominatorB);
 
         Denominator = ListA_sqrt * ListB_sqrt;
-        System.out.format("\n-------------\nDenominator: %s", Denominator+"\n");
+        System.out.format("\n-------------\nDenominator: %s", Denominator + "\n");
 
-    
     }
 
-    public  void GetNumerator(Map UaCourseList, Map UbCourseList) {
+    public void GetNumerator(Map UaCourseList, Map UbCourseList) {
         Map<String, Integer> numeratorMap = new HashMap<String, Integer>();
         ArrayList NumeratorList = new ArrayList();
         Iterator it = UaCourseList.entrySet().iterator();
@@ -127,7 +122,7 @@ public class RecommendationHistoryClass {
 
         }
         System.out.format("\n-------------\n Numerator: %s", Numerator + "\n");
-  
+
     }
 
 }

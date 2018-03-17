@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -31,10 +31,10 @@ public class get_Courseshref {
             for (int pageNum = 1; pageNum < 30; pageNum++) {
 
                 search_language = "English";
-                search_key = "Database Management";
-                courseRoot= "Engineering";
-                courseClass = "Computer Science";
-                courseSubClass="Database Management";
+                search_key = "Financial";
+                courseRoot= "Business";
+                courseClass = "Finance";
+                courseSubClass="Budgting";
                 
                 
                 //get course url

@@ -12,8 +12,6 @@
         <servlet-name>API_getUserEmail</servlet-name>
         <servlet-class>BUSLOGIC.API_getUserEmail</servlet-class>
     </servlet>
-    
-    
     <servlet>
         <servlet-name>API_getedubackground</servlet-name>
         <servlet-class>BUSLOGIC.API_getedubackground</servlet-class>
@@ -105,6 +103,10 @@
     <servlet>
         <servlet-name>test</servlet-name>
         <servlet-class>BUSLOGIC.test</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>API_getUserByID</servlet-name>
+        <servlet-class>BUSLOGIC.API_getUserByID</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>get_CoursesUCAS</servlet-name>
@@ -209,6 +211,10 @@
     <servlet-mapping>
         <servlet-name>test</servlet-name>
         <url-pattern>/test</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>API_getUserByID</servlet-name>
+        <url-pattern>/API_getUserByID</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
