@@ -135,6 +135,7 @@ public class API_courseSearch extends HttpServlet {
                 CourseList_FinalScore_Ordered.forEach((k, v) -> {
 
                     subprocess.list_coursesIds.add(k);
+                    System.out.format("IDs with similarity: %s => %s", k,v);
 
                 });
                 mysql.closemySQLconnection();
