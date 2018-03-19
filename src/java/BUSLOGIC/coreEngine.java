@@ -131,7 +131,7 @@ public class coreEngine {
                 cbscore += subprocess.cal_courseTitleSimilarity(subprocess.userSearchkey, subprocess.coursesObject.getString("course_title"));
                 cbscore += subprocess.cal_courseMajorSimilarity(subprocess.userMajor, subprocess.coursesObject.getString("course_field"), subprocess.coursesObject.getString("course_qualification"));
                 cbscore += subprocess.cal_locationSimilarity(subprocess.coursesObject.getString("course_location"), subprocess.userRegion);
-                cbscore += subprocess.cal_courseFees(subprocess.minFees, subprocess.maxFees, subprocess.coursesObject.getString("course_fees_uk").replace("£", "").replace(",", ""));
+                cbscore += subprocess.cal_courseFees(subprocess.core_courseFeesRangeStart, subprocess.core_courseFeesRangeEnd, subprocess.coursesObject.getString("course_fees_uk").replace("£", "").replace(",", ""));
 //        2.3   Hashmapping the output.
                 addContentBasedScore(subprocess.coursesObject.getInt("id"), cbscore);
 
