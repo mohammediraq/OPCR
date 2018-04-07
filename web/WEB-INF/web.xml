@@ -108,6 +108,34 @@
         <servlet-name>API_getUserByID</servlet-name>
         <servlet-class>BUSLOGIC.API_getUserByID</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>API_loginAuth</servlet-name>
+        <servlet-class>BUSLOGIC.API_loginAuth</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>API_getUserProfileByMail</servlet-name>
+        <servlet-class>BUSLOGIC.API_getUserProfileByMail</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>API_getCourses</servlet-name>
+        <servlet-class>BUSLOGIC.API_getCourses</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>API_allCoursesPublic</servlet-name>
+        <servlet-class>BUSLOGIC.API_allCoursesPublic</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>API_getJobs</servlet-name>
+        <servlet-class>BUSLOGIC.API_getJobs</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>API_listAllJobs</servlet-name>
+        <servlet-class>BUSLOGIC.API_listAllJobs</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>API_ManageAlgorithm</servlet-name>
+        <servlet-class>BUSLOGIC.API_ManageAlgorithm</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>get_CoursesUCAS</servlet-name>
         <url-pattern>/get_CoursesUCAS</url-pattern>
@@ -215,6 +243,34 @@
     <servlet-mapping>
         <servlet-name>API_getUserByID</servlet-name>
         <url-pattern>/API_getUserByID</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>API_loginAuth</servlet-name>
+        <url-pattern>/API_loginAuth</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>API_getUserProfileByMail</servlet-name>
+        <url-pattern>/API_getUserProfileByMail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>API_getCourses</servlet-name>
+        <url-pattern>/API_getCourses</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>API_allCoursesPublic</servlet-name>
+        <url-pattern>/API_allCoursesPublic</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>API_getJobs</servlet-name>
+        <url-pattern>/API_getJobs</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>API_listAllJobs</servlet-name>
+        <url-pattern>/API_listAllJobs</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>API_ManageAlgorithm</servlet-name>
+        <url-pattern>/API_ManageAlgorithm</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

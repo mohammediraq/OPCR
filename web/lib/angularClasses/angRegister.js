@@ -72,11 +72,11 @@ angulerRouterApp.controller('regctrl', function ($scope, $http) {
 
 
 // insert profile 
-    $scope.insertUserProfile = function (ufn, uln, umn, uad, ucit, uem, umo, uedb, ucq, ulang, uski, fos, cln, scln) {
+    $scope.insertUserProfile = function (ufn, uln, umn, uad, ucit, uem, umo, uedb, ucq, ulang, uski, fos, cln, scln,upass,ugender,uinarea) {
         $scope.disableButton = false;
         $scope.showResponsePanel = false;
 
-        $http.get('/Ontology/API_insertNewUser?ufn=' + ufn + '&uln=' + uln + '&umn=' + umn + '&uad=' + uad + '&ucit=' + ucit + '&uem=' + uem + '&umo=' + umo + '&uedb=' + uedb + '&ucq=' + ucq + '&ulang=' + ulang + '&uski=' + uski + '').then(function (response) {
+        $http.get('/Ontology/API_insertNewUser?ufn=' + ufn + '&uln=' + uln + '&umn=' + umn + '&uad=' + uad + '&ucit=' + ucit + '&uem=' + uem + '&umo=' + umo + '&uedb=' + uedb + '&ucq=' + ucq + '&ulang=' + ulang + '&uski=' + uski + '&upass='+upass+'&fos='+fos+'&cln='+cln+'&scln='+scln+'&g='+ugender+'&int='+uinarea+'').then(function (response) {
 
             $scope.registrationStatus = response.data;
             console.log($scope.registrationStatus[0].addingUserResponse);

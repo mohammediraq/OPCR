@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title></title>
+
+        <!-- Bootstrap core CSS -->
+
+
+        <!-- Custom styles for this template -->
+
+    </head>
+
+    <body>
+        <section ng-app="angulerRouter" ng-controller="angulerAdmin">
+            <div class="row" >
+                <div class="col">
+
+                    <form name="modClassForm" class="col-md-8">
+                        <div class="form-group">
+                            <label>Level Name</label>
+                            <select ng-model="ng0ConfigName" class="form-control btn btn-dark">
+                                
+                                <option ng-repeat="c in allConfigObject " value="{{c.item_name}}">{{c.item_name}} : Value => {{c.item_weight}}</option>
+                            </select>
+                            <small id="careerHelp" class="form-text text-muted">Current Configurations</small>
+                  
+                            
+                      
+                        <h4 ng-show="ng0ConfigName"> Enter new value for: {{ng0ConfigName}} </h4>
+                          </div>
+                        <div class="form-group">
+                            <label>New Value</label>
+                            <input type="number" ng-model="ng0newValue"  name="classname" class="form-control" aria-describedby="classHelp" placeholder="Enter Level Order">
+                            <small id="classHelp" class="form-text text-muted">This change may impact the algorithm flow and results.</small>
+                          
+                            
+                        </div>
+
+                       
+                    </form>
+                    <button class="btn btn-primary" ng-disabled="disableButton" ng-click="changeConfig(ng0ConfigName,ng0newValue)">Submit</button>
+                   
+                </div>  
+                <div class="col">
+                    <!--column 2-->
+                </div>
+            </div>
+        </section>
+
+
+    </body>
+</html>
+

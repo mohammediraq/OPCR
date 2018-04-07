@@ -47,26 +47,37 @@ public class API_insertNewUser extends HttpServlet {
             String usr_mid_name = request.getParameter("umn").replace("%20", " ");
             String usr_address = request.getParameter("uad").replace("%20", " ");
             String usr_city = request.getParameter("ucit").replace("%20", " ");
-
+            String usr_pass = request.getParameter("upass");
             String usr_email = request.getParameter("uem").replace("%20", " ");
             String usr_mobile = request.getParameter("umo").replace("%20", " ");
+            String usr_gender = request.getParameter("g").replace("%20", " ");
+            String usr_inarea = request.getParameter("int").replace("%20", " ");
 //          end of contact data
             String usr_education_background = request.getParameter("uedb").replace("%20", " ");
             String usr_current_qualification = request.getParameter("ucq").replace("%20", " ");
             String usr_language = request.getParameter("ulang").replace("%20", " ");
             String usr_skills = request.getParameter("uski").replace("%20", " ");
-            String usr_criteria = usr_city+"-"+usr_education_background+"-"+usr_language+"-"+usr_current_qualification;
-
+            String usr_criteria = usr_city + "-" + usr_education_background + "-" + usr_language + "-" + usr_current_qualification;
+            String fos = request.getParameter("fos").replace("%20", " ");
+            String cln = request.getParameter("cln").replace("%20", " ");
+            String scln = request.getParameter("scln").replace("%20", " ");
+            
+            if("undefined".equals(usr_education_background))
+            {
+                usr_education_background = scln;
+            }
+            
+            
+            
             if (!"undefined".equals(usr_first_name) && !"undefined".equals(usr_last_name) && !"undefined".equals(usr_mid_name) && !"undefined".equals(usr_address) && !"undefined".equals(usr_city) && !"undefined".equals(usr_email) && !"undefined".equals(usr_mobile) && !"undefined".equals(usr_education_background) && !"undefined".equals(usr_current_qualification) && !"undefined".equals(usr_language) && !"undefined".equals(usr_skills)) {
 //            Create UID
                 usr_id = env.createUID(usr_first_name, usr_last_name);
-                
+
 //          Generating queries for adding new user
-                userConInfo = env.dq_insertUserContactInfo(usr_id, usr_first_name, usr_mid_name, usr_last_name, usr_address, usr_city, usr_email, usr_mobile, usr_education_background, usr_current_qualification, usr_language, usr_skills,usr_criteria);
-                
+                userConInfo = env.dq_insertUserContactInfo(usr_id, usr_first_name, usr_mid_name, usr_last_name, usr_address, usr_city, usr_email, usr_mobile, usr_education_background, usr_current_qualification, usr_language, usr_skills, usr_criteria, usr_pass, fos, cln, scln,usr_gender,usr_inarea);
+
                 mysql.openmySQLconnection();
                 mysql.executeSQL(userConInfo);
-                
 
                 mysql.closemySQLconnection();
                 m = json.printJson("addingUserResponse", "Thanks " + usr_first_name + " for registeration!");

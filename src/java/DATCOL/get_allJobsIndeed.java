@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 
-
 /**
  *
  * @author AhmedShalaby
@@ -28,11 +27,13 @@ public class get_allJobsIndeed {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        String subclass = "Business";
+        String KeyWord = "Accounting";
 
         for (pageNum = 0; pageNum < 999990000; pageNum += 10) {
 
             // 1000 * 10 loops * 10 ids per page = 100 job.
-            String jobsURL = "https://www.indeed.co.uk/jobs?q=computer+science&l=london&start=" + Integer.toString(pageNum);
+            String jobsURL = "https://www.indeed.co.uk/jobs?q=" + KeyWord.replace(" ", "+") + "&l=london&start=" + Integer.toString(pageNum);
             org.jsoup.nodes.Document doc1 = Jsoup.connect(jobsURL).get();
             String[] ids = new String[10];
             ids = doc1.getElementsByAttributeValue("data-tn-component", "organicJob").eachAttr("id").toArray(ids);
@@ -47,13 +48,14 @@ public class get_allJobsIndeed {
                 //.summary jrequirements
                 j = doc1.select("div#" + div_id);
                 showJobs();
-                String cols = "job_title," + "job_company," + "job_reviews," + "job_location," + "job_salary," + "job_desc";
+                String cols = "job_title," + "job_company," + "job_reviews," + "job_location," + "job_salary," + "job_desc," + "job_subclass";
                 String vals = "'" + j.select("h2").text() + "',"
                         + "'" + j.select(".company").text() + "',"
                         + "'" + j.select("> a > span.slNoUnderline").text() + "',"
                         + "'" + j.select("> span.company > span").text() + "',"
                         + "'" + j.select("> table > tbody > tr > td > div:nth-child(1) > span.no-wrap").text() + "',"
-                        + "'" + j.select(".summary").text() + "'";
+                        + "'" + j.select(".summary").text() + "',"
+                        + "'"+subclass+"'";
 
                 gv.dbname = "DATSET";
                 gv.dbuser = "root";
@@ -62,7 +64,7 @@ public class get_allJobsIndeed {
                 sql._insertCol = cols;
                 sql._insertVal = vals;
                 sql.connectMYSQL();
-
+                showJobs();
             }
 
         }

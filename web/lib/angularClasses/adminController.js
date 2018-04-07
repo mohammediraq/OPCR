@@ -18,6 +18,28 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
     };
 //    
 
+//get algorithm config
+
+    $scope.getAllConfig = function ()
+    {
+        $http.get('API_ManageAlgorithm?m=getConfig').then(function (response) {
+            if (response.status === 200)
+            {
+                $scope.allConfigObject = response.data;
+            }
+        });
+    };
+
+    $scope.changeConfig = function (k, v)
+    {
+        $http.get('API_ManageAlgorithm?m=updateConfig&k=' + k + '&v=' + v + '').then(function (response) {
+            if (response.status === 200)
+            {
+                $scope.resp = response.data;
+            }
+        });
+    }
+
 //insert new class conf 
 
     $scope.insertClass = function (cn, cl, scl) {
@@ -110,7 +132,7 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
 //API_updateCourseItemWeight
 
     $scope.updateCourseItemWeight = function (rec, it, wv) {
-      
+
         $scope.updateWeightsArray = "";
         $http.get('/Ontology/API_updateCourseItemWeight?rec=' + rec + '&it=' + it + '&pr=' + wv + '').then(function (response) {
             $scope.updateWeightsArray = response.data;
@@ -155,10 +177,10 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
 
 
 
-    $scope.showUpdatePanel = function (rn,it,iw) {
+    $scope.showUpdatePanel = function (rn, it, iw) {
         $scope.showEditPanel = false;
-        var rowIndex = rn ;
-        var itemName_el =it;
+        var rowIndex = rn;
+        var itemName_el = it;
         var itemWeight_el = iw;
         $scope.rind = rowIndex;
         $scope.itn = itemName_el;
@@ -243,5 +265,16 @@ angulerRouterApp.controller('angulerAdmin', function ($scope, $http) {
 
     };
 
+    $scope.onload = function ()
+    {
+  var sessionAuth = sessionStorage.getItem("AdminAuth");
+
+        if (sessionAuth !== "Admin")
+        {
+            console.log(sessionAuth);
+            window.location.replace("login.html");
+        };
+    };
+    $scope.onload();
 
 });

@@ -5,7 +5,7 @@
  */
 
 
-var angulerRouterApp = angular.module('angulerRouter', ["ngRoute"]);
+var angulerRouterApp = angular.module('angulerRouter', ["ngRoute","ngSanitize"]);
 
 angulerRouterApp.config(function ($routeProvider) {
     $routeProvider
@@ -44,6 +44,9 @@ angulerRouterApp.config(function ($routeProvider) {
             })
                   .when("/editCourseLevels",{
                         templateUrl:"coursesLevelsMod.html"
+            })
+                  .when("/viewConfig",{
+                        templateUrl:"viewConfig.html"
             })
          
 });

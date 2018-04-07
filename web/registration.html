@@ -7,12 +7,15 @@
         <meta name="author" content="">
         <script src="jquery.js" type="text/javascript"></script>
         <script src="lib/angular.js" type="text/javascript"></script>
+        <script src="lib/angular-router.js" type="text/javascript"></script>
         <script src="lib/angularClasses/angApp.js" type="text/javascript"></script>
+        <script src="lib/angularClasses/angRegister.js" type="text/javascript"></script>
         <script src="lib/angularClasses/SearchController.js" type="text/javascript"></script>
         <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <link href="lib/bootstrap/css/bootstrap-grid.min.css" rel="stylesheet" type="text/css"/>
         <script src="lib/bootstrap/jquery-3.2.1.slim.min.js" type="text/javascript"></script>
-        <link href="lib/bootstrap/justified-nav.css" rel="stylesheet" type="text/css"/>
+        <link href="lib/bootstrap/justified-nav.css" rel="stylesheet" type="text/css"/>  
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-sanitize.js"></script>
         <script src="lib/bootstrap/popper.js" type="text/javascript"></script>
         <title>Administration</title>
 
@@ -81,7 +84,26 @@
 
 
                             </div>
+
+
                         </div>
+                        <hr>
+                        <div class="row">
+                            <div class="form-group col">
+                                <label>Gender</label>
+                                <select ng-model="ng0Gender">
+
+                                    <option >Male</option>
+                                    <option >Female</option>
+                                </select>
+
+
+
+                            </div>
+                        </div>
+
+                        <hr>
+
                         <div class="form-group">
                             <label>Address</label>
                             <input type="text" ng-model="uad"  class="form-control" aria-describedby="SubclassHelp" placeholder="Street Name,Building Number">
@@ -99,20 +121,32 @@
 
 
                         </div>
-                        </br>
+
+                        <hr>
                         <div class="form-group row">
 
-                            <div class="col">
+                            <div class="form-group col-auto">
                                 <label>Email</label>
-                                <input  class="input input-danger" type="email" ng-change="validateUserMail(uem)" ng-model="uem"  placeholder="example@domain.com" aria-label="Username" aria-describedby="basic-addon1">
+                                <input  class="input form-control input-danger" type="email" ng-change="validateUserMail(uem)" ng-model="uem"  placeholder="example@domain.com" aria-label="Username" aria-describedby="basic-addon1">
                             </div>
-                            <div class="col">
-                                <div class="alert alert-{{validationClass}} " ng-show="uem" role="alert">
-                                    <strong>{{uem}}</strong> {{validationMsg}}
-                                </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="alert alert-{{validationClass}} " ng-show="uem" role="alert">
+                                <strong>{{uem}}</strong> {{validationMsg}}
                             </div>
                         </div>
+                        <hr>
+                        <div class="row mt-3 mb-3">
+                            <div class="form-group col">
+                                <label>Password</label>
+                                <input ng-model="ng0upass" type="text" ng-model="upass"  class="form-control" aria-describedby="SubclassHelp" placeholder="Account Password">
+                                <small>We don't recommend to use your  <b>facebook,twitter,Banking portals or personal email</b> passwords</small>
 
+
+                            </div>
+                        </div>
+                        <hr>
                         <div class="form-group " >
                             <label>Mobile</label>
                             <input type="text" ng-model="umo"  class="form-control" aria-describedby="SubclassHelp" placeholder="Mobile Number">
@@ -134,7 +168,7 @@
                                     <option ng-repeat=" eduOptions in eduArray">{{eduOptions.subclass_name}}</option>
 
                                 </select>
-                                <a  href="#" ng-click='showAddNewField = true'>Your Field of study isn't listed?</a>
+                                <a  href="#" ng-click='showAddNewField = true;uedb = scln'>Your Field of study isn't listed?</a>
                                 <div ng-show='showAddNewField'>
 
                                     <div class="form-group">
@@ -199,19 +233,25 @@
                         </div>
 
                         <hr>
+                        <div class="row">
+                            <div class="col">
+                                <label>Interest Area </label>
+                                <input type="textarea" ng-model="ng0InterestArea"  class="form-control" aria-describedby="SubclassHelp" placeholder="Field you like ex.business,programming">
+                            </div>
 
+                        </div>
 
-
+                        <hr>
 
                     </div>
 
 
                 </div>
+                <hr>
 
-                </br> 
                 <div class="">
                     <div class="" style='margin-left:30%;width:40%;'>
-                        <button ng-disabled="disableButton"  ng-click='insertUserProfile(ufn, uln, umn, uad, ucit, uem, umo, uedb, ucq, ulang, uski, fos, cln, scln);'   class="btn btn-success btn-xs btn-block" >Submit</button>
+                        <button ng-disabled="disableButton"  ng-click='insertUserProfile(ufn, uln, umn, uad, ucit, uem, umo, uedb, ucq, ulang, uski, fos, cln, scln, ng0upass,ng0Gender,ng0InterestArea);'   class="btn btn-success btn-xs btn-block" >Submit</button>
 
 
                         <div class="alert alert-success " ng-show="showResponsePanel" role="alert">
