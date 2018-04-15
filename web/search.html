@@ -254,6 +254,7 @@
                         <caption >Recommended Jobs for your profile</caption>
                         <thead>
                             <tr>
+                                <th scope="col">Job Details</th>
                                  <th scope="col">Job ID</th>
                                 <th scope="col">Job Title</th>
                                 <th scope="col">Company</th>
@@ -269,7 +270,7 @@
                                   <td><div class="mt-4 alert alert-dark popup" ng-click="myFunction(j.job_id)">Job Details
   <span class="popuptext" id="myPopup{{j.job_id}}">{{j.job_desc}}</span>
                                     </div> </td>
-                                <td >{{j.job_id}}</td>
+                                <td >J{{j.job_id}}</td>
                                 <td >{{j.job_title}}</td>
                                 <td>{{j.job_company}}</td>
                                 <td>{{j.job_salary}}</td>

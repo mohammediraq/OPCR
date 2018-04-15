@@ -100,7 +100,7 @@ public class var_env {
     
     public String getJobsByClass( String s)
     {
-        String q = "	SELECT * FROM DATSET.Jobs_Indeed_info where job_subclass = '"+s+"'";
+        String q = "	SELECT * FROM DATSET.Jobs_Indeed_info where job_subclass = '"+s+"' and job_salary != \"\" ";
         
         return q;
     }

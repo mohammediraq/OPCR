@@ -376,6 +376,9 @@ public class coreEngineSubProccess {
             Statement getUserARecommendations = mysql.con.createStatement();
             ResultSet userARecommendations = getUserARecommendations.executeQuery("SELECT * FROM DATSET.course_search_score where user_id = '" + uid + "'  ");
             COB.UaCourseList.clear();
+            
+          
+            
             while (userARecommendations.next()) {
                 
 //              

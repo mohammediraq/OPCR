@@ -71,17 +71,15 @@ public class CommonRatedCalculator {
 //            KNN_ListOfID.add(ka);
 //            KNN_ListOfIDRates.add(kv);
 //        });
-
 //       applying the eqution
 //        Get Omax
-       
         getOmax(KNN_ListOfIDRates);
         for (int i = 0; i < ContentBased_ListOfID.size(); i++) {
 //            looping for each content based course item.
             double _ARWc = getARWc(ContentBased_ListOfID.get(i).toString());
             double _Oc = getOc(ContentBased_ListOfID.get(i).toString());
 //            Eq
-            double CRIscore = ((_ARWc * ((listOfVars.KNNW *100)- (Omax * 2)) / (listOfVars.KNNW*100)) + _Oc * 2) / 100;
+            double CRIscore = ((_ARWc * ((listOfVars.KNNW * 100) - (Omax * 2)) / (listOfVars.KNNW * 100)) + _Oc * 2) / 100;
 //            
             FinalList_ComRated.put(Integer.parseInt(ContentBased_ListOfID.get(i).toString()), CRIscore);
 
@@ -112,8 +110,11 @@ public class CommonRatedCalculator {
 
     // TODO -- Shalaby. > done
     public void getOmax(ArrayList KNNList) {
-//        
-        int _Omax = Integer.parseInt(Collections.max(KNNList).toString());
+//       
+        int _Omax = 0;
+        if (!KNNList.isEmpty()) {
+            _Omax = Integer.parseInt(Collections.max(KNNList).toString());
+        }
 
         Omax = _Omax;
     }
@@ -174,11 +175,10 @@ public class CommonRatedCalculator {
             }
 //            get the rate
         }
-        
-        if (ArrOfIndecies == 0)
-        {
+
+        if (ArrOfIndecies == 0) {
             // this will modify NAN error.
-            ArrOfIndecies =1 ;
+            ArrOfIndecies = 1;
         }
 //        calculate the average;
         _ARWc = (resolvedRate / ArrOfIndecies);

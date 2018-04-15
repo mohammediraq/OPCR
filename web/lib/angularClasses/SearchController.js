@@ -30,7 +30,7 @@ angulerRouterApp.controller('Search_Controller', function ($scope, $http) {
 
 
 ///API_courseSearch?methodName=searchCourse&key=Computer%20Graph&usrid=AHMSH0001&sc=Computer%20Graphics&ur=Jersey&um=Computer%20Programming&nss=55&coursemin=8000&coursemx=10000
-            $http.get('API_courseSearch?methodName=searchCourse&key=' + ng0searchKey.replace(" ", "%20") + '&usrid=' + userObject.data[0].usr_id + '&sc=' + userObject.data[0].usr_subclass.replace(" ", "%20") + '&ur=' + userObject.data[0].usr_region.replace(' ', '%20') + '&um=' + userObject.data[0].usr_education_background + '&nss=' + ng0minNSS + '&coursemin=8000&coursemx=' + ng0Search_CourseFees + '').then(function (courseResponse) {
+            $http.get('API_courseSearch?methodName=searchCourse&key=' + ng0searchKey.replace(" ", "%20") + '&usrid=' + userObject.data[0].usr_id + '&sc=' + userObject.data[0].usr_subclass.replace(" ", "%20") + '&ur=' + userObject.data[0].usr_region.replace(' ', '%20') + '&um=' + userObject.data[0].usr_education_background + '&nss=' + ng0minNSS + '&coursemin=2000&coursemx=' + ng0Search_CourseFees + '').then(function (courseResponse) {
 //            courseResponse
 
                 if (courseResponse.status === 200) {

@@ -87,12 +87,16 @@ public class API_courseSearch extends HttpServlet {
                 core.map_contentBasedFinalScore.clear();
                 core.map_COBFinalScore.clear();
                 commonRateEngine.FinalList_ComRated.clear();
-               
-                
+             
                 
                 core.setSearchProperties(user_major, user_subclass, searchKey, user_region, minNSS, courseMinFees, courseMaxFees);
+                
                 core.CB_calculateCourseSimilarities();
+                
+               
+                
                 core.CollaborativeEngine(userIdentification);
+                
                 core.CommonRateEngine();
                 //CourseList_FinalScore
 
@@ -211,7 +215,7 @@ public class API_courseSearch extends HttpServlet {
         } catch (IllegalAccessException ex) {
             Logger.getLogger(API_courseSearch.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(API_courseSearch.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(API_courseSearch.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
