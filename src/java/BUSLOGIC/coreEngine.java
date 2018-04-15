@@ -275,8 +275,9 @@ public class coreEngine {
     }
 
     public double cal_UniversityRank(int universityRank) {
-        int Rmax = 0;
-        int Rmin = 1;
+        double Rmax = 0.0;
+        double Rmin = 1.0;
+        double sim = 0.0;
         if (universityRank > 0) {
             try {
                 //            get the Rmax
@@ -291,8 +292,8 @@ public class coreEngine {
                 mysql.closemySQLconnection();
 //   Implement the equation
 
-                double sim = (Rmax - universityRank) / (Rmax - Rmin);
-                UniversityRankSimilarity = sim;
+                 sim = (Rmax - universityRank) / (Rmax - Rmin);
+             UniversityRankSimilarity = sim;
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(coreEngineSubProccess.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {
@@ -307,13 +308,13 @@ public class coreEngine {
 
         }
 
-        return UniversityRankSimilarity * subprocess.core_universityRankWeight;
+        return sim * subprocess.core_universityRankWeight;
     }
 
     public double cal_UniversityNSS(double scoreOfNSS) {
         double minNSS = 0.0;
         double maxNSS = 0.0;
-
+        double sim = 0.0;
         if (scoreOfNSS > 0) {
             try {
 
@@ -329,7 +330,7 @@ public class coreEngine {
                 mysql.closemySQLconnection();
 //                implement the equation.
 
-                double sim = (scoreOfNSS - (minNSS - 1)) / (maxNSS - (minNSS - 1));
+                 sim = (scoreOfNSS - (minNSS - 1)) / (maxNSS - (minNSS - 1));
                 UniversityNSS_Similarity = sim;
 
             } catch (ClassNotFoundException ex) {
@@ -346,6 +347,6 @@ public class coreEngine {
 
         }
 
-        return UniversityNSS_Similarity * subprocess.core_universityNSSWeight;
+        return sim * subprocess.core_universityNSSWeight;
     }
 }

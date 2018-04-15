@@ -85,7 +85,7 @@ public class RecommendationHistoryClass {
 
         ListA_sqrt = Math.sqrt(DenominatorA);
         ListB_sqrt = Math.sqrt(DenominatorB);
-
+Denominator =0.0;
         Denominator = ListA_sqrt * ListB_sqrt;
         System.out.format("\n-------------\nDenominator: %s", Denominator + "\n");
 
@@ -117,6 +117,8 @@ public class RecommendationHistoryClass {
                 });
             }
         });
+         Numerator = 0;
+         
         for (int i = 0; i < NumeratorList.size(); i++) {
             Numerator += Integer.parseInt(NumeratorList.get(i).toString());
 

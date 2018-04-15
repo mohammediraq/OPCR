@@ -91,7 +91,7 @@ public class API_courseSearch extends HttpServlet {
                 
                 core.setSearchProperties(user_major, user_subclass, searchKey, user_region, minNSS, courseMinFees, courseMaxFees);
                 
-                core.CB_calculateCourseSimilarities();
+           core.CB_calculateCourseSimilarities();
                 
                
                 
