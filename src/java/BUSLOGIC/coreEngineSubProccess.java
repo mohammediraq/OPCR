@@ -284,7 +284,7 @@ public class coreEngineSubProccess {
                 }
             }
         }
-        mysql.closemySQLconnection();
+       
        
         return sim_courseLocation *  contentBased_courseLocationWeight;
     }
