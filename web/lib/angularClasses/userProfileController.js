@@ -25,6 +25,7 @@ angulerRouterApp.controller('ng0userProfile', function ($scope, $http) {
         $scope.userSkills = $scope.userProfileObj.usr_skills;
         sessionStorage.setItem("id",$scope.userID);
         sessionStorage.setItem("subclass",$scope.userFOS);
+        $scope.uv = sessionStorage.getItem('id');
 
 
     });

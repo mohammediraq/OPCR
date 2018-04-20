@@ -23,11 +23,29 @@ public class coursesModuler {
      */
     public static void main(String[] args) throws SQLException, InstantiationException, IllegalAccessException, Exception {
         // TODO code application logic here
-
+        moduleCourseTitle();
         moduleUniversityName();
         moduleUniversityNSS();
     }
 
+    
+    
+      public static void moduleCourseTitle() throws SQLException, InstantiationException, IllegalAccessException, Exception {
+        sql.openmySQLconnection();
+        ResultSet r = sql.executeSQLquery_stringRS2("select id,course_title from datset.courses_postgrad", 0);
+        while (r.next()) {
+            String splittedWords[] = r.getString("course_title").split("\\(");
+            String newTitle = splittedWords[0];
+            courses.add(newTitle.trim());
+
+            System.out.print(r.getString("id") + ":" + newTitle + "\n");
+            sql.executeSQL("update datset.courses_postgrad set course_title = '" + newTitle.trim() + "' where id =" + r.getString("id") + "");
+
+        }
+        sql.closemySQLconnection();
+
+    }
+    
     public static void moduleUniversityName() throws SQLException, InstantiationException, IllegalAccessException, Exception {
         sql.openmySQLconnection();
         ResultSet r = sql.executeSQLquery_stringRS2("select id,course_title from datset.courses_postgrad", 0);

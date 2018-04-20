@@ -8,7 +8,7 @@
 angulerRouterApp.controller('Search_Controller', function ($scope, $http) {
 
 
-
+     $scope.uv = sessionStorage.getItem('id');
 //search function 
     $scope.getCourseByProfile = function (ng0searchKey, ng0minNSS, ng0Search_CourseFees) {
 

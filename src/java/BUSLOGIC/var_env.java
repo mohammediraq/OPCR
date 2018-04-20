@@ -153,7 +153,7 @@ public class var_env {
             if (careerCode.length == 1) {
                 careerId = careerCode[0].substring(0, 3).toUpperCase() + "000" + classOrder;
             } else {
-                careerId = careerCode[0].substring(0, 2).toUpperCase() + careerCode[1].substring(0, 2).toUpperCase() + "000" + classOrder;
+                careerId = careerCode[0].substring(0, 1).toUpperCase() + careerCode[1].substring(0, 1).toUpperCase() + "000" + classOrder;
             }
 
         }
@@ -164,7 +164,7 @@ public class var_env {
             if (classCode.length == 1) {
                 classId = classCode[0].substring(0, 3).toUpperCase() + "000" + classOrder;
             } else {
-                classId = classCode[0].substring(0, 2).toUpperCase() + classCode[1].substring(0, 2).toUpperCase() + "000" + classOrder;
+                classId = classCode[0].substring(0, 1).toUpperCase() + classCode[1].substring(0, 1).toUpperCase() + "000" + classOrder;
             }
         }
 
@@ -198,7 +198,7 @@ public class var_env {
             if (subClassCode.length == 1) {
                 subClassId = subClassCode[0].substring(0, 3).toUpperCase() + "000" + subClassOrder;
             } else {
-                subClassId = subClassCode[0].substring(0, 2).toUpperCase() + subClassCode[1].substring(0, 2).toUpperCase() + "000" + subClassOrder;
+                subClassId = subClassCode[0].substring(0, 1).toUpperCase() + subClassCode[1].substring(0, 1).toUpperCase() + "000" + subClassOrder;
             }
         }
 
@@ -208,7 +208,7 @@ public class var_env {
             if (classCode.length == 1) {
                 classId = classCode[0].substring(0, 3).toUpperCase() + "000" + classOrder;
             } else {
-                classId = classCode[0].substring(0, 2).toUpperCase() + classCode[1].substring(0, 2).toUpperCase() + "000" + classOrder;
+                classId = classCode[0].substring(0, 1).toUpperCase() + classCode[1].substring(0, 1).toUpperCase() + "000" + classOrder;
             }
         }
 
