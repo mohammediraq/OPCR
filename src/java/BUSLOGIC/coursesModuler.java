@@ -32,7 +32,7 @@ public class coursesModuler {
     
       public static void moduleCourseTitle() throws SQLException, InstantiationException, IllegalAccessException, Exception {
         sql.openmySQLconnection();
-        ResultSet r = sql.executeSQLquery_stringRS2("select id,course_title from datset.courses_postgrad", 0);
+    ResultSet r = sql.executeSQLquery_stringRS2("select id,course_title from datset.courses_postgrad where course_title like ('%(%')", 0);
         while (r.next()) {
             String splittedWords[] = r.getString("course_title").split("\\(");
             String newTitle = splittedWords[0];
