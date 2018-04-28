@@ -7,6 +7,7 @@ package BUSLOGIC;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,6 +66,23 @@ public class API_insertNewUser extends HttpServlet {
             if("undefined".equals(usr_education_background))
             {
                 usr_education_background = scln;
+            }
+            
+              if("undefined".equals(fos) && "undefined".equals(cln) && "undefined".equals(scln))
+            {
+                mysql.openmySQLconnection();
+                ResultSet rs = mysql.executeSQLquery_stringRS2("SELECT * FROM DATSET.conf_classes a inner join conf_subclasses b\n"
+                        + "on a.class_id = b.class_id\n"
+                        + "where b.subclass_name ='" + usr_education_background + "'", 0);
+                while(rs.next())
+                {
+                    fos = rs.getString("field_of_study");
+                    cln = rs.getString("class_name");
+                    scln = usr_education_background;
+                    
+                }
+                mysql.closemySQLconnection();
+                
             }
             
             

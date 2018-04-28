@@ -150,7 +150,7 @@ public class API_courseSearch extends HttpServlet {
                     mysql.openmySQLconnection();
                     Statement getTop5CoursesData = mysql.con.createStatement();
 
-                    ResultSet top5Courses_Object = getTop5CoursesData.executeQuery("SELECT * FROM DATSET.courses_postgrad where id in (" + ids + ") ORDER BY FIELD(id, "+ids+")");
+                    ResultSet top5Courses_Object = getTop5CoursesData.executeQuery("SELECT * FROM DATSET.courses_postgrad where id in ('1'," + ids + ") ORDER BY FIELD(id, "+ids+")");
                     while (top5Courses_Object.next()) {
                         out.print(json.convertToJSON(top5Courses_Object));
                     }
